@@ -24,8 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class Server {
-	public ArrayList<Socket> socketList;
-	public ArrayList<GameServer> gameServerList;
+//	public ArrayList<Socket> socketList;
+//	public ArrayList<GameServer> gameServerList;
+//	public Socket socket1;
+	public GameServer gameServer;
 	public ServerSocket serverSocket;
 	public ExecutorService executor;
 	public CustomLock matchingLock;
@@ -53,8 +55,9 @@ public class Server {
 	}
 	
 	public Server() throws IOException {
-		socketList = new ArrayList<Socket>();
-		gameServerList = new ArrayList<GameServer>();
+//		socketList = new ArrayList<Socket>();
+//		gameServerList = new ArrayList<GameServer>();
+		
 		executor = Executors.newFixedThreadPool(20);
 		serverSocket = new ServerSocket(8000);
 		port = 8001;
@@ -84,13 +87,15 @@ public class Server {
 		@Override
 		public void run() {
 			try {
+				System.out.println("this method runs");
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 				//Prepare (create) the game server
-				GameServer gameServer = new GameServer(port);
+//				GameServer gameServer = new GameServer(port);
+				gameServer = new GameServer(port);
 				//Return port number
 				out.println("PORTNUM_" + port);
 				System.out.println(Thread.currentThread().getName() + ": " + "PORTNUM_" + port + " sent");
-				gameServerList.add(gameServer);
+//				gameServerList.add(gameServer);
 				executor.execute(gameServer);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -150,9 +155,9 @@ public class Server {
 				//Reset every Game Server
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					for(GameServer gameServer : gameServerList) {
+//					for(GameServer gameServer : gameServerList) {
 						gameServer.socketThread1.resetServer();
-					}
+//					}
 				}
 				
 			});

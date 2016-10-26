@@ -160,12 +160,14 @@ public class LandingPage extends UI {
 		buttonp5.setPreferredSize(new Dimension(100, 100));
 
 		west1d.add(buttonp5);
+		profilephoto=player1;
 		
 		buttonp1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player1);
 				main.picImage="character/player1b.png";
+				profilephoto=player1;
 				main.player.setImage(profilephoto);
 			}
 		});
@@ -174,6 +176,7 @@ public class LandingPage extends UI {
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player2);
 				main.picImage="character/player2b.png";
+				profilephoto=player2;
 				main.player.setImage(profilephoto);
 			}
 		});
@@ -182,6 +185,7 @@ public class LandingPage extends UI {
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player3);
 				main.picImage="character/player3b.png";
+				profilephoto=player3;
 				main.player.setImage(profilephoto);
 			}
 		});
@@ -189,6 +193,7 @@ public class LandingPage extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player4);
+				profilephoto=player4;
 				main.picImage="character/player4b.png";
 				main.player.setImage(profilephoto);
 			}

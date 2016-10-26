@@ -103,11 +103,11 @@ public class BoardGame implements Serializable{
 		return true;
 	}
 	//ngong???
-	public boolean mark(Square markingSquare) {
-		return false;
-		//If hit return true
-		//If not hit return false
-	}
+//	public boolean mark(Square markingSquare) {
+//		return false;
+//		//If hit return true
+//		//If not hit return false
+//	}
 	
 	public boolean[] fireShot(int y, int x) { //Called when the opponent fireshot on a square
 		Square square = myBoard[y][x];
