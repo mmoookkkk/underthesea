@@ -1,70 +1,66 @@
 package game;
 
-import java.io.Serializable;
 
-
-import javax.swing.JLabel;
 import userInterface.SquareLabel;
 
-public class Square implements Comparable<Square> {
+public class Square implements Comparable <Square>{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7539706428845824277L;
-	protected int x;
-	protected int y;
-	protected boolean marked;
-	protected boolean occupied;
-	protected Ship occupyingShip;
-	//Non-serializable
-	protected transient SquareLabel label;
+	int x;
+	int y;
+	boolean clicked;
+	boolean hasShip;
+	Ship shipOnThisSquare;
+	SquareLabel label;
 	
 	public Square(int y, int x) {
-		this.y = y;
 		this.x = x;
-		marked = false;
-		occupied = false;
-	}
-	public void setOccupyingShip(Ship ship) {
-		occupyingShip = ship;
-		occupied = true;
+		this.y = y;
+		hasShip = false;
+		clicked = false;
 	}
 	
-	public void setSquareLabel(SquareLabel squareLabel) {
-		label = squareLabel;
-	}
-	
-	public boolean isOccupied() {
-		return occupied;
-	}
-	
-	public boolean isMarked() {
-		return marked;
-	}
-	
-	public SquareLabel getSquareLabel() {
-		return label;
+	public int getX() {
+		return x;
 	}
 	
 	public int getY() {
 		return y;
 	}
 	
-	public int getX() {
-		return x;
-	}
 	@Override
-	public int compareTo(Square o) {
-		if(occupyingShip.direction.equals("down")) {
-			if(y < o.y) return -1;
-			else if(y > o.y) return 1;
+	public int compareTo(Square other) {
+		if(shipOnThisSquare.direction.equals("vertical")) {
+			if(y > other.y) return 1;
+			else if(y < other.y) return -1;
 			else return 0;
 		} else {
-			if(x < o.x) return -1;
-			else if(x > o.x) return 1;
+			if(x > other.x) return 1;
+			else if(x < other.x) return -1;
 			else return 0;
 		}
 	}
+	
+	public boolean isClicked() {
+		return clicked;
+	}
+	
+	public boolean hasShip() {
+		return hasShip;
+	}
+	
+	public void placeShipOn(Ship ship) {
+		shipOnThisSquare = ship;
+		hasShip = true;
+	}
+	
+	public void setUIOfThisSquare(SquareLabel label) {
+		this.label = label;
+	}
+	
+	
+	public SquareLabel getUIOfThisSquare() {
+		return label;
+	}
+			
 	
 }

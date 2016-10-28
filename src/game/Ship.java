@@ -1,41 +1,32 @@
 package game;
 
-import java.io.Serializable;
-
-
-import game.Square;
-import userInterface.SquareLabel;
-
-public class Ship implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -651467608234216669L;
-	public Square [] occupancy;
-	public boolean sunk;
-	public int shipNumber;
+public class Ship {
 	public String direction;
+	public int shipNumber;
+	boolean shipSunk;
+	Square[] squareOfThisShip;
 	
 	public Ship(int shipNumber, String direction) {
-		occupancy = new Square[4];
+		squareOfThisShip = new Square[4];
 		this.shipNumber = shipNumber;
 		this.direction = direction;
 	}
 	
-	public void setOccupation(Square[] occupancy) {
-		this.occupancy = occupancy;
+	public void setSquareOfThisShip(Square[] squareOfThisShip) {
+		this.squareOfThisShip = squareOfThisShip;
+	}
+
+	public Square[] getSquareOfThisShip() {
+		return squareOfThisShip;
 	}
 	
-	public Square[] getOccupancy() {
-		return occupancy;
-	}
-	
-	public boolean isSunk() {
-		for(Square square : occupancy) {
-			if(!square.marked) return false;
+	public boolean isShipSunk() {
+		for(int i=0;i<4;i++) {
+			if(!squareOfThisShip[i].clicked) {
+				return false;
+			}
 		}
-		System.out.println(Thread.currentThread().getName() + ": ship " + shipNumber + " has been sunk!" );
+		
 		return true;
 	}
 	

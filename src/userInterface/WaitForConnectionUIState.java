@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.net.MalformedURLException;
@@ -15,13 +16,13 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import game.Main;
-import gameState.GameState;
+import gameState.StackPage;
 
 public class WaitForConnectionUIState extends UI {
  
  //Test purpose
  public WaitForConnectionUIState() {
-  stateString = GameState.WAIT_FOR_CONNECTION_STATE;
+	  stateString = StackPage.WAITFORCONNECTION;
  }
  /**
   * @throws MalformedURLException 
@@ -31,7 +32,7 @@ public class WaitForConnectionUIState extends UI {
 
   super(main);
 
-  stateString = GameState.WAIT_FOR_CONNECTION_STATE;
+  stateString = StackPage.WAITFORCONNECTION;
 
   dialog = new JDialog(main, "");
 
@@ -68,30 +69,20 @@ public class WaitForConnectionUIState extends UI {
   }
  
  @Override
- public void entered() {
+ public void launch() {
   System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
   dialog.setVisible(true);
   
  }
 
  @Override
- public void leaving() {
+ public void leave() {
   System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
   dialog.dispose();
   
  }
 
- @Override
- public void obscuring() {
-  // TODO Auto-generated method stub
-  
- }
 
- @Override
- public void revealed() {
-  // TODO Auto-generated method stub
-  
- }
  
  
 }

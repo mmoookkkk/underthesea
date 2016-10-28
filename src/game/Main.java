@@ -48,11 +48,11 @@ import javax.swing.Timer;
 import game.*;
 import gameState.*;
 import userInterface.*;
-import gameState.GameStateManager;
+import gameState.StackFunction;
 
 public class Main extends JFrame {
 	// public JFrame frame;
-	public final GameStateManager GSM = new GameStateManager();
+	public final StackFunction GSM = new StackFunction();
 	public JPanel currentStatePanel;
 	public boolean isClient;
 	public boolean start = true;
@@ -293,13 +293,14 @@ public class Main extends JFrame {
 		// UI field related to GameClient
 
 		// Global serializable field
-		public BoardGame boardGame;
+		public GridTable gridTable;
 		// protected boolean isWithLocalServer = false;
-		private String playerState;
+		public String playerState;
 
 		protected GameClient(Socket socket) {
 			this.socket = socket;
-			playerState = PlayerState.NULL_STATE;
+			playerState="NULL_STATE";
+
 			accumulativeScore = 0;
 			initialize();
 
@@ -311,7 +312,7 @@ public class Main extends JFrame {
 			currentScore = 0;
 			opponentScore = 0;
 			// Create a board game
-			boardGame = new BoardGame();
+			gridTable = new GridTable();
 		}
 
 		@Override
@@ -338,12 +339,12 @@ public class Main extends JFrame {
 			out.println(CommandString.CLIENT_GAME_START_READY);
 			System.out
 					.println(Thread.currentThread().getName() + ": " + CommandString.CLIENT_GAME_START_READY + " sent");
-			playerState = PlayerState.EXPECT_SERVER_START_GAME;
+			playerState = "EXPECT_SERVER_START_GAME";
 		}
 
 //		public void requestNewGame() {
 //			out.println(CommandString.CLIENT_REQUEST_NEW_GAME);
-//			playerState = PlayerState.EXPECT_SERVER_START_GAME;
+//			playerState = "EXPECT_SERVER_START_GAME";
 //			myTurn = false;
 //			setupClip.start();
 //			GSM.popState(); // Pop EndGameDialogUIState
@@ -351,14 +352,14 @@ public class Main extends JFrame {
 
 		public void resetGame() {
 			out.println(CommandString.CLIENT_RESET_GAME);
-			playerState = PlayerState.EXPECT_SERVER_START_GAME;
+			playerState = "EXPECT_SERVER_START_GAME";
 			myTurn = false;
 		}
 
 		public void mark(int y, int x) {
 			// Mark the square y,x
 			out.println("MARK_" + y + "," + x);
-			playerState = PlayerState.IDLE;
+			playerState = "IDLE";
 			myTurn = false;
 		}
 
@@ -375,7 +376,7 @@ public class Main extends JFrame {
 		protected GameClient(GameServer gameServer) {
 			// this.gameServer = gameServer;
 			player = new Player();
-			boardGame = new BoardGame();
+			gridTable = new GridTable();
 			// isWithLocalServer = true;
 
 		}
@@ -385,8 +386,8 @@ public class Main extends JFrame {
 		//
 		// }
 
-		public void setBoardGame(BoardGame boardGame) {
-			this.boardGame = boardGame;
+		public void setGridTable(GridTable gridTable) {
+			this.gridTable = gridTable;
 		}
 
 		class BackgroundInputReader extends SwingWorker<Void, String> {
@@ -435,7 +436,7 @@ public class Main extends JFrame {
 																			// connection
 																			// is
 																			// accepted
-						if (!(playerState.equals(PlayerState.NULL_STATE)))
+						if (!(playerState.equals("NULL_STATE")))
 							break; // TODO Raise SynchronizeErrorException
 						System.out.println(
 								Thread.currentThread().getName() + ": The other client is not available. waiting...");
@@ -452,24 +453,24 @@ public class Main extends JFrame {
 						break;
 
 					case CommandString.SERVER_OTHER_CLIENT_AVAILABLE:
-						if (!playerState.equals(PlayerState.NULL_STATE)
-								|| !playerState.equals(PlayerState.EXPECT_SERVER_OTHER_CLIENT_AVAILABLE))
+						if (!playerState.equals("NULL_STATE")
+								|| !playerState.equals("EXPECT_SERVER_OTHER_CLIENT_AVAILABLE"))
 							; // Raise SynchronizationErrorException
 						// The other client has connected
 						// Pop UI state UNTIL MAIN_GAME_STATE
-						GSM.popStateUntil(GameState.MAIN_MENU_STATE);
+						GSM.popStateUntil(StackPage.LANDINGPAGE);
 						// Push GAME_SETUP_READY_STATE
 						GSM.pushState(new GameSetupReadyUIState(Main.this));
 						out.println("CLIENT_PIC_" + picImage);
-						// Set playerState EXPECT_SERVER_GAME_SETUP
-						playerState = PlayerState.EXPECT_SERVER_GAME_SETUP;
+						// Set "EXPECT_SERVER_GAME_SETUP"
+						playerState = "EXPECT_SERVER_GAME_SETUP";
 						// Wait for the player to press Ready...
 						// System.out.println("name :" + player.name);
 						// out.println("CLIENT_NAME_" + player.getName());
 						break;
 
 					case CommandString.SERVER_START_GAME_SETUP:
-						if (!playerState.equals(PlayerState.EXPECT_SERVER_GAME_SETUP))
+						if (!playerState.equals("EXPECT_SERVER_GAME_SETUP"))
 							; // Raise SynchronizationErrorException
 						// Server is ready to start game setup
 						// Start the game setup
@@ -477,7 +478,7 @@ public class Main extends JFrame {
 						initialize();
 						System.out.print("SENDING" + picImage);
 						out.println("CLIENT_NAME_" + player.getName());
-						GSM.popStateUntil(GameState.MAIN_MENU_STATE);
+						GSM.popStateUntil(StackPage.LANDINGPAGE);
 						// Change UI state -> GAME_SETUP_STATE
 						gameSetupUI = new GameSetupUIState(Main.this);
 
@@ -485,29 +486,31 @@ public class Main extends JFrame {
 //						setupClip.start();
 
 						GSM.changeState(gameSetupUI);
-						playerState = PlayerState.START_GAME_SETUP;
+						playerState = "START_GAME_SETUP";
 
 					case CommandString.SERVER_OPPONENT_NOT_READY:
-						if (!playerState.equals(PlayerState.EXPECT_SERVER_START_GAME))
+						if (!playerState.equals("EXPECT_SERVER_START_GAME"))
 							return; // If not pressing ready yet -> do nothing
 						// The other client is not ready
 						// Wait
 						// Push WAIT_FOR_OPPONENT_READY State
 						GSM.pushState(new WaitForOpponentReadyUIState(Main.this));
 						gameSetupUI.b1.setIcon(createImageIcon("ready.png", 10, 10));
+						//need to be changed
 						break;
 
 					case CommandString.SERVER_OPPONENT_READY:
 						gameSetupUI.b2.setIcon(createImageIcon("ready.png", 10, 10));
+						//need to be changed
 						break;
 
 					case CommandString.SERVER_START_GAME:
-						if (playerState.equals(PlayerState.EXPECT_SERVER_START_GAME)
-								|| playerState.equals(PlayerState.START_GAME_SETUP)) {
+						if (playerState.equals("EXPECT_SERVER_START_GAME")
+								|| playerState.equals("START_GAME_SETUP")) {
 							// Server is ready to start game
 							// Start the game
 							// Pop UI state until GAME_SETUP_STATE
-							GSM.popStateUntil(GameState.GAME_SETUP_STATE);
+							GSM.popStateUntil(StackPage.PLACEYOURSHIP);
 
 //							setupClip.close();
 //							battleClip.start();
@@ -519,25 +522,25 @@ public class Main extends JFrame {
 							// Change UI state -> GAME_STATE
 							gameUI = new GameUIState(Main.this);
 							GSM.changeState(gameUI);
-							playerState = PlayerState.IDLE;
+							playerState = "IDLE";
 							break;
 						}
 						// TODO
 						break;
 					case CommandString.SERVER_GRANT_TURN: // Server give you a
-															// turn
-						if (playerState.equals(PlayerState.IDLE)) {
-							playerState = PlayerState.PLAYING;
-							myTurn = true;
+						// turn
+			if (playerState.equals("IDLE")) {
+				playerState = "PLAYING";
+				myTurn = true;
 
-							// Sirawich
-							ActionListener timerTask = new ActionListener() {
-								int countdown = 10;
+				// Sirawich
+				ActionListener timerTask = new ActionListener() {
+					int countdown = 10;
 
-								@Override
-								public void actionPerformed(ActionEvent e) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
 
-									if (countdown == 0) {
+						if (countdown == 0) {
 
 										// time up expire random mark(y,x)
 										Random r = new Random();
@@ -604,7 +607,7 @@ public class Main extends JFrame {
 						GSM.changeState(gameSetupUI);
 						if (timer_turn_duration != null)
 							timer_turn_duration.stop();
-						playerState = PlayerState.START_GAME_SETUP;
+						playerState = "START_GAME_SETUP";
 
 					default:
 						if (input.indexOf("RETURN_MARK") != -1) {
@@ -615,9 +618,9 @@ public class Main extends JFrame {
 							boolean sunk = Boolean.parseBoolean(input.substring(input.lastIndexOf(",") + 1));
 							String sub = input.substring(0, input.lastIndexOf(","));
 							boolean hit = Boolean.parseBoolean(sub.substring(sub.lastIndexOf("_") + 1));
-							Square markedSquare = boardGame.board[y][x];
-							SquareLabel hitSquareLabel = markedSquare.getSquareLabel();
-							markedSquare.marked = true;
+							Square markedSquare = gridTable.attackingTable[y][x];
+							SquareLabel hitSquareLabel = markedSquare.getUIOfThisSquare();
+							markedSquare.clicked = true;
 							if (hit) { // If hit
 
 								// call method to increase point
@@ -635,7 +638,7 @@ public class Main extends JFrame {
 									e1.printStackTrace();
 								}
 							} else { // If not hit
-								boardGame.board[y][x].marked = true;
+								gridTable.attackingTable[y][x].clicked = true;
 								// Update UI (not hit)
 								hitSquareLabel.setIcon(createImageIcon("effect/miss.png", 37, 37));
 
@@ -688,12 +691,12 @@ public class Main extends JFrame {
 
 							int y = Integer.parseInt(index.substring(0, 1));
 							int x = Integer.parseInt(index.substring(2));
-							boolean[] hitSunk = boardGame.fireShot(y, x);
+							boolean[] hitSunk = gridTable.attacked(y, x);
 							boolean hit = hitSunk[0];
 							boolean sunk = hitSunk[1];
-							boolean lose = hitSunk[2];
-							Square markedSquare = boardGame.myBoard[y][x];
-							SquareLabel hitSquareLabel = boardGame.myBoard[y][x].getSquareLabel();
+//							boolean lose = hitSunk[2];
+//							Square markedSquare = boardGame.myBoard[y][x];
+							SquareLabel hitSquareLabel = gridTable.myCurrentTable[y][x].getUIOfThisSquare();
 							// TODO Update UI
 							if (hit) { // If hit
 								// Update UI (hit)
@@ -709,7 +712,7 @@ public class Main extends JFrame {
 							// TODO check if the player won the game
 							out.println("RETURN_MARK_" + y + "," + x + "_" + hit + "," + sunk);
 
-							playerState = PlayerState.IDLE;
+							playerState = "IDLE";
 							myTurn = true;
 
 							// Sirawich
@@ -730,7 +733,7 @@ public class Main extends JFrame {
 										while (true) {
 											random_x = r.nextInt(High - Low) + Low;
 											random_y = r.nextInt(High - Low) + Low;
-											if (!client.boardGame.board[random_y][random_x].isMarked())
+											if (!client.gridTable.attackingTable[random_y][random_x].isClicked())
 												break;
 										}
 										mark(random_y, random_x);
@@ -743,7 +746,7 @@ public class Main extends JFrame {
 										for (int i = 0; i < 7; i++) {
 											for (int j = 0; j < 7; j++) {
 												// if(client.boardGame.board[i][j].isMarked()){
-												if (client.boardGame.myBoard[i][j].isMarked()) {
+												if (client.gridTable.myCurrentTable[i][j].isClicked()) {
 													point_opponent += 1;
 												}
 											}
@@ -774,8 +777,6 @@ public class Main extends JFrame {
 
 						} else if (input.indexOf("CLIENT_PIC") != -1) {
 							opponentPic = input.substring(input.lastIndexOf("_") + 1);
-//							Main.this.repaint();
-//							Main.this.revalidate();
 
 						}
 					}

@@ -2,6 +2,7 @@ package userInterface;
 
 import javax.swing.JPanel;
 
+
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.BorderLayout;
@@ -31,11 +32,11 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
-import game.BoardGame;
+
 import game.Main;
 import game.Main.GameClient;
-import gameState.GameState;
-import gameState.GameStateManager;
+import gameState.StackPage;
+import gameState.StackFunction;
 import game.Ship;
 import game.Square;
 import userInterface.SquareLabel;
@@ -68,7 +69,7 @@ public class GameUIState extends UI {
 
 	public GameUIState(Main main) {
 		super(main);
-		stateString = GameState.GAME_STATE;
+		stateString = StackPage.BATTLE;
 
 		panel = UI.createJPanelWithBackground(main.background);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -203,10 +204,10 @@ public class GameUIState extends UI {
 		boardLabel = new SquareLabel[8][8];
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
-				SquareLabel squareLabel = new SquareLabel("", this.main);
-				squareLabel.setName(y + "," + x);
-				squareLabel.setBoardIndex();
-				squareLabel.setBoardSquare();
+				SquareLabel squareLabel = new SquareLabel(this.main);
+//				squareLabel.setName(y + "," + x);
+				squareLabel.setPosition(y,x);
+				squareLabel.setAttackingTableUI();
 				squareLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				squareLabel.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 				squareLabel.addMouseListener(new MouseAdapter() {
@@ -216,9 +217,9 @@ public class GameUIState extends UI {
 							SquareLabel squareLabel = (SquareLabel) e.getSource();
 							int y = squareLabel.y;
 							int x = squareLabel.x;
-							System.out.println("Marked: " + boardLabel[y][x].getSquare().isMarked());
-							System.out.println("Occupied: " + boardLabel[y][x].getSquare().isOccupied());
-							if (boardLabel[y][x].getSquare().isMarked())
+							System.out.println("Marked: " + boardLabel[y][x].getSquare().isClicked());
+							System.out.println("Occupied: " + boardLabel[y][x].getSquare().hasShip());
+							if (boardLabel[y][x].getSquare().isClicked())
 								return;
 							main.client.mark(y, x);
 
@@ -229,7 +230,7 @@ public class GameUIState extends UI {
 							for (int i = 0; i < 7; i++) {
 								for (int j = 0; j < 7; j++) {
 									// if(client.boardGame.board[i][j].isMarked()){
-									if (main.client.boardGame.myBoard[i][j].isMarked()) {
+									if (main.client.gridTable.myCurrentTable[i][j].isClicked()) {
 										point_opponent += 1;
 										
 									
@@ -402,7 +403,7 @@ public class GameUIState extends UI {
 		profileClient.setPreferredSize(new Dimension(60, 60));
 		JLabel P1 = new JLabel();
 
-		Image img = main.player.getImage().getImage();
+		Image img = main.player.getProfilePhoto().getImage();
 		Image newimg = img.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		P1.setIcon(new ImageIcon(newimg));
 
@@ -487,10 +488,10 @@ public class GameUIState extends UI {
 		myBoardLabel = new SquareLabel[8][8];
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
-				SquareLabel squareLabel = new SquareLabel("", this.main);
-				squareLabel.setName(y + "," + x);
-				squareLabel.setIndex();
-				squareLabel.setMyBoardSquare();
+				SquareLabel squareLabel = new SquareLabel(this.main);
+//				squareLabel.setName(y + "," + x);
+				squareLabel.setPosition(y,x);
+				squareLabel.setMyCurrentTableUI();
 				squareLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				squareLabel.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 				// Set own ship
@@ -500,10 +501,10 @@ public class GameUIState extends UI {
 		}
 
 		// Set ships in myBoardLabel
-		for (Ship ship : main.client.boardGame.getAllShips()) {
+		for (Ship ship : main.client.gridTable.getAllShips()) {
 			int i = 1;
-			for (Square square : ship.getOccupancy()) {
-				if (ship.direction.equals("right")) {
+			for (Square square : ship.getSquareOfThisShip()) {
+				if (ship.direction.equals("horizontal")) {
 					myBoardLabel[square.getY()][square.getX()].setIcon(
 							new ImageIcon("ship/horizontal/ship" + (ship.shipNumber + 1) + "" + (i++) + ".png"));
 				} else {
@@ -541,29 +542,19 @@ public class GameUIState extends UI {
 	}
 
 	@Override
-	public void entered() {
+	public void launch() {
 		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
 		main.replaceCurrentPanel(panel);
 		main.setEnabled(true);
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
 		main.setEnabled(false);
 	}
 
-	@Override
-	public void obscuring() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " being stacked");
-		main.setEnabled(false);
-	}
 
-	@Override
-	public void revealed() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " resumed");
-		main.setEnabled(true);
-	}
 	
 
 }

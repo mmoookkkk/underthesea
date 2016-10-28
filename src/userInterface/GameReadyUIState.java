@@ -2,6 +2,7 @@ package userInterface;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,20 +13,20 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import game.Main;
-import gameState.GameState;
+import gameState.StackPage;
 
 public class GameReadyUIState extends UI {
 	public JButton readyBtn;
 	
 	public GameReadyUIState() {
-		stateString = GameState.GAME_SETUP_READY_STATE;
+		stateString = StackPage.SHIPREADY;
 	}
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public GameReadyUIState(Main main) {
 		super(main);
-		stateString = GameState.GAME_SETUP_READY_STATE;
+		stateString = StackPage.SHIPREADY;
 		dialog = new JDialog(main, "Ready!");
 		dialog.setSize(300, 80);
 		dialog.setPreferredSize(new Dimension(300,80));
@@ -52,27 +53,17 @@ public class GameReadyUIState extends UI {
 	}
 	
 	@Override
-	public void entered() {
+	public void launch() {
 		dialog.setVisible(true);
 		
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		dialog.dispose();
 		
 	}
 
-	@Override
-	public void obscuring() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void revealed() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

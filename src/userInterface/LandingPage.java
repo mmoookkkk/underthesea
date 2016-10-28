@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import game.Main;
-import gameState.GameState;
+import gameState.StackPage;
 
 public class LandingPage extends UI {
 	public JPanel mainPanel;
@@ -42,13 +42,13 @@ public class LandingPage extends UI {
 	public JTextField profilename;
 	public static boolean checkbg=true;
 	public LandingPage() {
-		stateString = GameState.MAIN_MENU_STATE;
+		stateString = StackPage.LANDINGPAGE;
 	}
 
 	public LandingPage(Main main) {
 
 		super(main);
-		stateString = GameState.MAIN_MENU_STATE;
+		stateString = StackPage.LANDINGPAGE;
 		initialize();
 	}
 
@@ -169,7 +169,7 @@ public class LandingPage extends UI {
 				buttonp5.setIcon(player1);
 				main.picImage="character/player1b.png";
 				profilephoto=player1;
-				main.player.setImage(profilephoto);
+				main.player.setProfilePhoto(profilephoto);
 			}
 		});
 		buttonp2.addActionListener(new ActionListener() {
@@ -178,7 +178,7 @@ public class LandingPage extends UI {
 				buttonp5.setIcon(player2);
 				main.picImage="character/player2b.png";
 				profilephoto=player2;
-				main.player.setImage(profilephoto);
+				main.player.setProfilePhoto(profilephoto);
 			}
 		});
 		buttonp3.addActionListener(new ActionListener() {
@@ -187,7 +187,7 @@ public class LandingPage extends UI {
 				buttonp5.setIcon(player3);
 				main.picImage="character/player3b.png";
 				profilephoto=player3;
-				main.player.setImage(profilephoto);
+				main.player.setProfilePhoto(profilephoto);
 			}
 		});
 		buttonp4.addActionListener(new ActionListener() {
@@ -196,7 +196,7 @@ public class LandingPage extends UI {
 				buttonp5.setIcon(player4);
 				profilephoto=player4;
 				main.picImage="character/player4b.png";
-				main.player.setImage(profilephoto);
+				main.player.setProfilePhoto(profilephoto);
 			}
 		});
 
@@ -329,7 +329,7 @@ public class LandingPage extends UI {
 		buttonConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.player.setImage(profilephoto);
+				main.player.setProfilePhoto(profilephoto);
 				main.player.setName(nameField.getText());
 				main.connect();
 			}
@@ -345,33 +345,21 @@ public class LandingPage extends UI {
 	
 
 	
-
-	public void entered() {
+	@Override
+	public void launch() {
 		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
 		main.replaceCurrentPanel(mainPanel);
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		// Buffer the MAIN_MENU_STATE
 		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
 		main.getContentPane().remove(main.currentStatePanel);
-		// main.GSM.storeBufferedState(GameStateManager.MAIN_MENU_STATE, this);
+		// main.GSM.storeBufferedState(StackFunction.MAIN_MENU_STATE, this);
 
 	}
 
-	@Override
-	public void obscuring() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " being stacked");
-		main.setEnabled(false);
 
-	}
-
-	@Override
-	public void revealed() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " resumed");
-		main.setEnabled(true);
-
-	}
 
 }

@@ -1,20 +1,13 @@
 package game;
 
-import java.awt.Image;
-
-
 import javax.swing.ImageIcon;
 
 public class Player {
 	String name;
-	ImageIcon imageIcon;
+	ImageIcon profilePhoto;
 	
-	public Player() {
-		
-	}
-	
-	public void setImage(ImageIcon icon) {
-		imageIcon = icon;
+	public Player(){
+		profilePhoto=new ImageIcon("character/player1b");
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -24,7 +17,10 @@ public class Player {
 		return name;
 	}
 	
-	public ImageIcon getImage(){
-		return imageIcon;
+	public void setProfilePhoto(ImageIcon photo) {
+		profilePhoto = photo;
+	}
+	public ImageIcon getProfilePhoto(){
+		return profilePhoto;
 	}
 }

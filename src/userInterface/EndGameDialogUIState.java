@@ -2,7 +2,8 @@ package userInterface;
 
 import game.Main;
 
-import gameState.GameState;
+
+import gameState.StackPage;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,7 +26,7 @@ public class EndGameDialogUIState extends UI {
 	
 	public EndGameDialogUIState(Main main, String text) {
 		super(main);
-		stateString = GameState.END_GAME_DIALOG_STATE;
+		stateString = StackPage.END;
 		dialog = new JDialog(main);
 		dialog.setSize(400, 300);
 		dialog.setPreferredSize(new Dimension(400, 300));
@@ -98,28 +99,18 @@ public class EndGameDialogUIState extends UI {
 	}
 
 	@Override
-	public void entered() {
+	public void launch() {
 		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
 		dialog.setVisible(true);
 		
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		dialog.dispose();
 		
 	}
 
-	@Override
-	public void obscuring() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void revealed() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

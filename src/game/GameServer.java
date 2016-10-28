@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class GameServer implements Runnable, Serializable {
+public class GameServer implements Runnable {
 	//Network attributes
 	public ServerSocket serverSocket;
 	private Socket firstClientSocket;
@@ -72,42 +72,9 @@ public class GameServer implements Runnable, Serializable {
 			//Start the second socket thread
 			socketThread2.start();
 			//Set GAME_SETUP_LOCK
-			CustomLock gameSetupReadyLock = new CustomLock(CustomLock.GAME_SETUP_READY_LOCK);
-			socketThread1.setLock(gameSetupReadyLock);
-			socketThread2.setLock(gameSetupReadyLock);
-			synchronized(gameSetupReadyLock) {
-				while(gameSetupReadyLock.getCounter() != 2) {
-					gameSetupReadyLock.wait();
-					System.out.println(Thread.currentThread().getName() + ": setup lock waked " + gameSetupReadyLock.getCounter() + " time");
-				}
-			}
-			//Write via sockets
-			socketThread1.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
-			socketThread2.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
-			//Set next lock
-			CustomLock gameStartReadyLock = new CustomLock(CustomLock.GAME_START_READY_LOCK);
-			socketThread1.setLock(gameStartReadyLock);
-			socketThread2.setLock(gameStartReadyLock);
-			System.out.println(Thread.currentThread().getName() + ": current counter is " + gameStartReadyLock.getCounter());
-			synchronized(gameStartReadyLock) {
-				while(gameStartReadyLock.getCounter() != 2) {
-					gameStartReadyLock.wait();
-					System.out.println(Thread.currentThread().getName() + ": start lock waked " + gameStartReadyLock.getCounter() + " time");
-				}
-			}
-			//Write via sockets
-			socketThread1.writeViaSocket(CommandString.SERVER_START_GAME);
-			socketThread2.writeViaSocket(CommandString.SERVER_START_GAME);
-			//Random for the first player
-			if(Math.random() < 0.5) {
-				currentPlayer = socketThread1;
-			} else {
-				currentPlayer = socketThread2;
-			}
-			currentPlayer.writeViaSocket(CommandString.SERVER_GRANT_TURN);
-//			START THE GAME
-			
-//			setupGame();
+
+			setupGame();
+			setupGame();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -117,57 +84,58 @@ public class GameServer implements Runnable, Serializable {
 		
 	}
 	
-//	public void setupGame() throws InterruptedException {
-//		//Set GAME_SETUP_LOCK
-//		CustomLock gameSetupReadyLock = new CustomLock(CustomLock.GAME_SETUP_READY_LOCK);
-//		socketThread1.setLock(gameSetupReadyLock);
-//		socketThread2.setLock(gameSetupReadyLock);
-//		synchronized(gameSetupReadyLock) {
-//			while(gameSetupReadyLock.getCounter() != 2) {
-//				gameSetupReadyLock.wait();
-//				System.out.println(Thread.currentThread().getName() + ": setup lock waked " + gameSetupReadyLock.getCounter() + " time");
-//			}
-//		}
-//		//Write via sockets
-//		socketThread1.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
-//		socketThread2.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
-//		//Set next lock
-//		CustomLock gameStartReadyLock = new CustomLock(CustomLock.GAME_START_READY_LOCK);
-//		socketThread1.setLock(gameStartReadyLock);
-//		socketThread2.setLock(gameStartReadyLock);
-//		System.out.println(Thread.currentThread().getName() + ": current counter is " + gameStartReadyLock.getCounter());
-//		synchronized(gameStartReadyLock) {
-//			while(gameStartReadyLock.getCounter() != 2) {
-//				gameStartReadyLock.wait();
-//				System.out.println(Thread.currentThread().getName() + ": start lock waked " + gameStartReadyLock.getCounter() + " time");
-//			}
-//		}
-//		//Write via sockets
-//		socketThread1.writeViaSocket(CommandString.SERVER_START_GAME);
-//		socketThread2.writeViaSocket(CommandString.SERVER_START_GAME);
-//		//Random for the first player
-//		if(Math.random() < 0.5) {
-//			currentPlayer = socketThread1;
-//		} else {
-//			currentPlayer = socketThread2;
-//		}
-//		currentPlayer.writeViaSocket(CommandString.SERVER_GRANT_TURN);
-//		//START THE GAME
-//		setupGame();
-//	}
+	public void setupGame() throws InterruptedException {
+		//Set GAME_SETUP_LOCK
+		CustomLock gameSetupReadyLock = new CustomLock(CustomLock.GAME_SETUP_READY_LOCK);
+		socketThread1.setLock(gameSetupReadyLock);
+		socketThread2.setLock(gameSetupReadyLock);
+		synchronized(gameSetupReadyLock) {
+			while(gameSetupReadyLock.getCounter() != 2) {
+				gameSetupReadyLock.wait();
+				System.out.println(Thread.currentThread().getName() + ": setup lock waked " + gameSetupReadyLock.getCounter() + " time");
+			}
+		}
+		//Write via sockets
+		socketThread1.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
+		socketThread2.writeViaSocket(CommandString.SERVER_START_GAME_SETUP);
+		//Set next lock
+		CustomLock gameStartReadyLock = new CustomLock(CustomLock.GAME_START_READY_LOCK);
+		socketThread1.setLock(gameStartReadyLock);
+		socketThread2.setLock(gameStartReadyLock);
+		System.out.println(Thread.currentThread().getName() + ": current counter is " + gameStartReadyLock.getCounter());
+		synchronized(gameStartReadyLock) {
+			while(gameStartReadyLock.getCounter() != 2) {
+				gameStartReadyLock.wait();
+				System.out.println(Thread.currentThread().getName() + ": start lock waked " + gameStartReadyLock.getCounter() + " time");
+			}
+		}
+		//Write via sockets
+		socketThread1.writeViaSocket(CommandString.SERVER_START_GAME);
+		socketThread2.writeViaSocket(CommandString.SERVER_START_GAME);
+		//Random for the first player
+		if(Math.random() < 0.5) {
+			currentPlayer = socketThread1;
+		} else {
+			currentPlayer = socketThread2;
+		}
+		currentPlayer.writeViaSocket(CommandString.SERVER_GRANT_TURN);
+		//START THE GAME
+		setupGame();
+		
+	}
 	
 	private void print(String input, int forwardNumber) {
 		if(forwardNumber == 1) socketThread1.writeViaSocket(input);
 		else socketThread2.writeViaSocket(input);
 	}
 // try playing in two com by removing this method if mai pen rai kor aow ork leoy
-	private void setupClient() {
-		try {
-			serverSocket = new ServerSocket(65536);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+//	private void setupClient() {
+//		try {
+//			serverSocket = new ServerSocket(65536);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
 		//Determine if the server run with a local client (P2P Case)
 //		if(isWithLocalClient) {
 //			//Start a thread that wait for another client's connection
@@ -194,7 +162,7 @@ public class GameServer implements Runnable, Serializable {
 //			// TODO Server-client implementation
 //		}
 		
-	}
+//	}
 	
 	protected void setServerSocket(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
@@ -342,16 +310,16 @@ public class GameServer implements Runnable, Serializable {
 								else print(CommandString.SERVER_INDICATE_YOU_WIN, 1);
 								break;
 							
-							case CommandString.CLIENT_REQUEST_NEW_GAME:
-								if(currentLock.getCounter() == 0) { //If not ready -> wait for the opponent
-									System.out.println(Thread.currentThread().getName() + ": The other client is not ready");
-									out.println(CommandString.SERVER_OPPONENT_NOT_READY);
-								}
-								synchronized(currentLock) {
-									currentLock.incrementCounter();
-									currentLock.notify();
-								}
-								break;
+//							case CommandString.CLIENT_REQUEST_NEW_GAME:
+//								if(currentLock.getCounter() == 0) { //If not ready -> wait for the opponent
+//									System.out.println(Thread.currentThread().getName() + ": The other client is not ready");
+//									out.println(CommandString.SERVER_OPPONENT_NOT_READY);
+//								}
+//								synchronized(currentLock) {
+//									currentLock.incrementCounter();
+//									currentLock.notify();
+//								}
+//								break;
 							
 							case CommandString.CLIENT_RESET_GAME:
 								//Go past GAME_START_READY_LOCK

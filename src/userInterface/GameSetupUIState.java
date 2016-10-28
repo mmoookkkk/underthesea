@@ -2,6 +2,8 @@ package userInterface;
 
 import javax.swing.JPanel;
 
+
+
 import javax.swing.JTextArea;
 
 import java.awt.GridLayout;
@@ -35,7 +37,7 @@ import javax.swing.border.LineBorder;
 import game.Main;
 import game.Ship;
 import game.Square;
-import gameState.GameState;
+import gameState.StackPage;
 
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -65,11 +67,11 @@ public class GameSetupUIState extends UI {
 
 	public GameSetupUIState(Main main) {
 		super(main);
-		stateString = GameState.GAME_SETUP_STATE;
+		stateString = StackPage.PLACEYOURSHIP;
 		shipPlacingEnabled = false;
-		shipPlacingDirection = "down"; // SHIPDIRECTION
+		shipPlacingDirection = "vertical"; // SHIPDIRECTION
 		shipNumber = 0;
-		main.start = false;
+//		main.start = false;
 		// main.insertBGM("login.wav");
 		initialize();
 	}
@@ -217,10 +219,10 @@ public class GameSetupUIState extends UI {
 		myBoardLabel = new SquareLabel[8][8];
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
-				SquareLabel squareLabel = new SquareLabel("", this.main);
-				squareLabel.setName(y + "," + x);
-				squareLabel.setIndex();
-				squareLabel.setMyBoardSquare();
+				SquareLabel squareLabel = new SquareLabel(this.main);
+//				squareLabel.setName(y + "," + x);
+				squareLabel.setPosition(y,x);
+				squareLabel.setMyCurrentTableUI();
 				squareLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				squareLabel.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 
@@ -234,13 +236,13 @@ public class GameSetupUIState extends UI {
 																		// right
 																		// button
 																		// click
-								if (shipPlacingDirection.equals("down")) {
+								if (shipPlacingDirection.equals("vertical")) {
 									shipPlacingDirection = "right";
 									// Re-invoke mouse exited and entered on e
 									mouseExited(e);
 									mouseEntered(e);
 								} else {
-									shipPlacingDirection = "down";
+									shipPlacingDirection = "vertical";
 									mouseExited(e);
 									mouseEntered(e);
 								}
@@ -253,13 +255,13 @@ public class GameSetupUIState extends UI {
 								// Create a ship on those squares
 								Ship ship = new Ship(shipNumber, shipPlacingDirection);
 								// Set ship on board game
-								boolean success = main.client.boardGame.setShip(ship, shipNumber, highlighting);
+								main.client.gridTable.placeShip(ship, shipNumber, highlighting);
 
-								if (success) { // Success -> set ship
+//								if (success) { // Success -> set ship
 												// graphically
 									int i = 1;
-									for (Square square : ship.getOccupancy()) {
-										SquareLabel squareLabel = square.getSquareLabel();
+									for (Square square : ship.getSquareOfThisShip()) {
+										SquareLabel squareLabel = square.getUIOfThisSquare();
 										// TODO set ship icon on the board game
 										// label.setText(shipNumber + "");
 										// label.setIcon(new
@@ -288,7 +290,7 @@ public class GameSetupUIState extends UI {
 
 									// Re-invoke mouse exited on e
 									mouseExited(e);
-									if (main.client.boardGame.isAllShipSet()) {
+									if (main.client.gridTable.allShipsReady()) {
 										// main.client.startGame();
 										readyButton.setEnabled(true);
 										lblPressReady.setText("Press Ready !!");
@@ -296,7 +298,7 @@ public class GameSetupUIState extends UI {
 										main.revalidate();
 									}
 									setShipPlacingEnabled(false);
-								}
+//								}
 							}
 						}
 						// Else do nothing
@@ -456,7 +458,7 @@ public class GameSetupUIState extends UI {
 		northPlayer2.add(playerPanel, BorderLayout.SOUTH);
 		playerPanel.setLayout(new BorderLayout(0, 0));
 
-		JLabel profile = new JLabel(main.player.getImage());
+		JLabel profile = new JLabel(main.player.getProfilePhoto());
 		// profile.setIcon(main.player.getImage());
 		profile.setBackground(Color.GRAY);
 		profile.setPreferredSize(new Dimension(80, 100));
@@ -483,7 +485,7 @@ public class GameSetupUIState extends UI {
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Check if all ship has been set
-				main.client.boardGame.clearAllShip();
+				main.client.gridTable.removeAllShip();
 				cancelButton.setEnabled(false);
 				lblPressReady.setText("");
 			}
@@ -499,8 +501,8 @@ public class GameSetupUIState extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Check if all ship has been set
-				System.out.println(main.client.boardGame.isAllShipSet());
-				if (main.client.boardGame.isAllShipSet()) {
+				System.out.println(main.client.gridTable.allShipsReady());
+				if (main.client.gridTable.allShipsReady()) {
 					main.client.startGame();
 
 				}
@@ -525,17 +527,17 @@ public class GameSetupUIState extends UI {
 				int x;
 				String direction = null;
 				// Clear all ship
-				main.client.boardGame.clearAllShip();
+				main.client.gridTable.removeAllShip();
 				for (int i = 0; i <= 3; i++) {
 					SquareLabel[] position = null;
 					while (position == null) {
 						if (Math.random() < 0.5) {
-							direction = "down";
+							direction = "vertical";
 							y = (int) Math.round(Math.random() * 4);
 							x = (int) Math.round(Math.random() * 7);
 							position = searchForHighlightableLabel(y, x, direction);
 						} else {
-							direction = "right";
+							direction = "horizontal";
 							y = (int) Math.round(Math.random() * 7);
 							x = (int) Math.round(Math.random() * 4);
 							position = searchForHighlightableLabel(y, x, direction);
@@ -543,14 +545,14 @@ public class GameSetupUIState extends UI {
 					}
 					Ship ship = new Ship(i, direction);
 					// Set ship on board game
-					main.client.boardGame.setShip(ship, i, position);
+					main.client.gridTable.placeShip(ship, i, position);
 					int j = 1;
-					for (Square square : ship.getOccupancy()) {
-						SquareLabel squareLabel = square.getSquareLabel();
+					for (Square square : ship.getSquareOfThisShip()) {
+						SquareLabel squareLabel = square.getUIOfThisSquare();
 						// TODO set ship icon on the board game
 						// label.setText(shipNumber + "");
 						// label.setIcon(new ImageIcon("ship1.png"));
-						if (direction.equals("right")) {
+						if (direction.equals("horizontal")) {
 							squareLabel.setIcon(new ImageIcon("ship/horizontal/ship" + (i + 1) + "" + (j++) + ".png"));
 
 						} else {
@@ -588,10 +590,10 @@ public class GameSetupUIState extends UI {
 				// Set ship number
 				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 				// Clear ship occupation
-				Ship ship = main.client.boardGame.getShip(shipNumber);
+				Ship ship = main.client.gridTable.getShip(shipNumber);
 				if (ship != null) { // If there are already ship1 set, clear the
 									// occupation
-					main.client.boardGame.clearOccupation(ship);
+					main.client.gridTable.removeShip(ship);
 					readyButton.setEnabled(false);
 					lblPressReady.setText("");
 
@@ -610,10 +612,10 @@ public class GameSetupUIState extends UI {
 				// Set ship number
 				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 				// Clear ship occupation
-				Ship ship = main.client.boardGame.getShip(shipNumber);
+				Ship ship = main.client.gridTable.getShip(shipNumber);
 				if (ship != null) { // If there are already ship2 set, clear the
 									// occupation
-					main.client.boardGame.clearOccupation(ship);
+					main.client.gridTable.removeShip(ship);
 					readyButton.setEnabled(false);
 					lblPressReady.setText("");
 				}
@@ -631,10 +633,10 @@ public class GameSetupUIState extends UI {
 				// Set ship number
 				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 				// Clear ship occupancy
-				Ship ship = main.client.boardGame.getShip(shipNumber);
+				Ship ship = main.client.gridTable.getShip(shipNumber);
 				if (ship != null) { // If there are already ship3 set, clear the
 									// occupation
-					main.client.boardGame.clearOccupation(ship);
+					main.client.gridTable.removeShip(ship);
 					readyButton.setEnabled(false);
 					lblPressReady.setText("");
 				}
@@ -652,10 +654,10 @@ public class GameSetupUIState extends UI {
 				// Set ship number
 				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 				// Clear ship occupation
-				Ship ship = main.client.boardGame.getShip(shipNumber);
+				Ship ship = main.client.gridTable.getShip(shipNumber);
 				if (ship != null) { // If there are already ship4 set, clear the
 									// occupation
-					main.client.boardGame.clearOccupation(ship);
+					main.client.gridTable.removeShip(ship);
 					readyButton.setEnabled(false);
 					lblPressReady.setText("");
 				}
@@ -695,7 +697,7 @@ public class GameSetupUIState extends UI {
 
 	public SquareLabel[] searchForHighlightableLabel(int y, int x, String direction) {
 		SquareLabel[] highlightable = new SquareLabel[4];
-		if (myBoardLabel[y][x].getSquare().isOccupied())
+		if (myBoardLabel[y][x].getSquare().hasShip())
 			return null;
 		highlightable[0] = myBoardLabel[y][x];
 		int index = 1, failedAttempt = 0;
@@ -708,7 +710,7 @@ public class GameSetupUIState extends UI {
 		int x = startingLabel.getXIndex();
 		// Find down/right label that don't cause IndexOutOfBoundError
 		SquareLabel[] highlightable = new SquareLabel[4];
-		if (myBoardLabel[y][x].getSquare().isOccupied())
+		if (myBoardLabel[y][x].getSquare().hasShip())
 			return null; // If the square is already occupied, return null
 		highlightable[0] = myBoardLabel[y][x]; // Add the first label into the
 												// array
@@ -721,11 +723,11 @@ public class GameSetupUIState extends UI {
 			SquareLabel[] highlightable) {
 		// Check to continue;
 		if (index <= 3) {
-			if (direction.equals("down")) { // If down direction
+			if (direction.equals("vertical")) { // If down direction
 				// Check if the next square exists
 				if (y + index <= 7) { // If exists
 					// Check occupancy
-					if (!myBoardLabel[y + index][x].getSquare().isOccupied()) { // If
+					if (!myBoardLabel[y + index][x].getSquare().hasShip()) { // If
 																				// not
 																				// occupied
 						// Add the label to highlightable
@@ -742,7 +744,7 @@ public class GameSetupUIState extends UI {
 				// Check if the next square exists
 				if (x + index <= 7) { // If exists
 					// Check occupancy
-					if (!myBoardLabel[y][x + index].getSquare().isOccupied()) { // If
+					if (!myBoardLabel[y][x + index].getSquare().hasShip()) { // If
 																				// not
 																				// occupied
 						// Add the label to highlightable
@@ -765,11 +767,11 @@ public class GameSetupUIState extends UI {
 			SquareLabel[] highlightable) {
 		// Check to continue;
 		if (index <= 3) {
-			if (direction.equals("down")) { // If down direction
+			if (direction.equals("vertical")) { // If down direction
 				// Check if the next square exists
 				if (y - failedAttempt >= 0) { // If exists
 					// Check occupancy
-					if (!myBoardLabel[y - failedAttempt][x].getSquare().isOccupied()) { // If
+					if (!myBoardLabel[y - failedAttempt][x].getSquare().hasShip()) { // If
 																						// not
 																						// occupied
 						// Add the label to highlightable
@@ -785,7 +787,7 @@ public class GameSetupUIState extends UI {
 				// Check if the next square exists
 				if (x - failedAttempt >= 0) { // If exists
 					// Check occupancy
-					if (!myBoardLabel[y][x - failedAttempt].getSquare().isOccupied()) { // If
+					if (!myBoardLabel[y][x - failedAttempt].getSquare().hasShip()) { // If
 																						// not
 																						// occupied
 						// Add the label to highlightable
@@ -812,7 +814,7 @@ public class GameSetupUIState extends UI {
 	}
 
 	@Override
-	public void entered() {
+	public void launch() {
 		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
 		main.replaceCurrentPanel(panel);
 		JOptionPane.showMessageDialog(main, "Welcome, " + main.player.getName());
@@ -820,22 +822,12 @@ public class GameSetupUIState extends UI {
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
 		main.setEnabled(false);
 
 	}
 
-	@Override
-	public void obscuring() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " being stacked");
-		main.setEnabled(false);
-	}
 
-	@Override
-	public void revealed() {
-		System.out.println(Thread.currentThread().getName() + ": " + stateString + " resumed");
-		main.setEnabled(true);
-	}
 
 }

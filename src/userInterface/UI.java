@@ -9,11 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import game.Main;
-import gameState.GameState;
+import gameState.StackPage;
 
-public abstract class UI implements GameState{
+public abstract class UI implements StackPage{
 	/* Abstract base class for all UI classes
-	 * Every UI has a GameState
+	 * Every UI has a StackPage
 	 * Every UI has a main reference and an instance of JPanel
 	 * JPanel can be left as null for some implementations
 	 * JDialog can be left as null for some implementations

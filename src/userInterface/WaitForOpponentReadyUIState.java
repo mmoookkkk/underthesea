@@ -1,6 +1,7 @@
 package userInterface;
 import java.awt.Dimension;
 
+
 import java.awt.FlowLayout;
 
 import javax.swing.JDialog;
@@ -8,13 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import game.Main;
-import gameState.GameState;
+import gameState.StackPage;
 
 public class WaitForOpponentReadyUIState extends UI {
 	
 	public WaitForOpponentReadyUIState(Main main) {
 		super(main);
-		stateString = GameState.WAIT_FOR_OPPONENT_READY_STATE;
+		stateString = StackPage.WAITFOROPPONENT;
 		dialog = new JDialog(main, "");
 		dialog.setLocation(Main.getPopUpLocation(this));
 		dialog.setPreferredSize(new Dimension(300,50));
@@ -31,29 +32,19 @@ public class WaitForOpponentReadyUIState extends UI {
 	}
 	
 	@Override
-	public void entered() {
+	public void launch() {
 		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
 		dialog.setVisible(true);
 		
 	}
 
 	@Override
-	public void leaving() {
+	public void leave() {
 		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
 		dialog.dispose();
 		
 	}
 
-	@Override
-	public void obscuring() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void revealed() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
