@@ -41,20 +41,20 @@ public class LandingPage extends UI {
 	public ImageIcon profilephoto;
 	public JTextField profilename;
 	public static boolean checkbg=true;
-	public LandingPage() {
-		stateString = StackPage.LANDINGPAGE;
-	}
+//	public LandingPage() {
+//		page = StackPage.LANDINGPAGE;
+//	}
 
 	public LandingPage(Main main) {
 
 		super(main);
-		stateString = StackPage.LANDINGPAGE;
+		page = StackPage.LANDINGPAGE;
 		initialize();
 	}
 
 	protected void initialize() {
 		
-		mainPanel = UI.createJPanelWithBackground(main.background);
+		mainPanel = paintMainPanel(main.background);
 		
 //		mainPanel.setPreferredSize(new Dimension(1200, 800));
 
@@ -258,7 +258,7 @@ public class LandingPage extends UI {
 			    
 			     main.background = Main.createImageIcon("bg/background1.png", 1024, 768).getImage();
 			     //Push this state and change MAIN_MENU_STATE to refresh the background
-			     main.GSM.changeState(new LandingPage(main));
+			     main.stack.changeState(new LandingPage(main));
 			     if(!(main.song1chosen)){
 			    	 main.song2.close();
 			    	 main.createSound();
@@ -292,7 +292,7 @@ public class LandingPage extends UI {
 			     main.background = Main.createImageIcon("bg/background2.png", 1024, 768).getImage();
 			     //Push this state and change MAIN_MENU_STATE to refresh the background
 			    
-			     main.GSM.changeState(new LandingPage(main));
+			     main.stack.changeState(new LandingPage(main));
 			     if(main.song1chosen){
 			    	 main.song1.close();
 			    	 main.createSound();
@@ -347,16 +347,16 @@ public class LandingPage extends UI {
 	
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		main.replaceCurrentPanel(mainPanel);
 	}
 
 	@Override
 	public void leave() {
 		// Buffer the MAIN_MENU_STATE
-		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
 		main.getContentPane().remove(main.currentStatePanel);
-		// main.GSM.storeBufferedState(StackFunction.MAIN_MENU_STATE, this);
+		// main.stack.storeBufferedState(StackFunction.MAIN_MENU_STATE, this);
 
 	}
 

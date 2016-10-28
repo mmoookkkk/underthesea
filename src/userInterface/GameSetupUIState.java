@@ -67,7 +67,7 @@ public class GameSetupUIState extends UI {
 
 	public GameSetupUIState(Main main) {
 		super(main);
-		stateString = StackPage.PLACEYOURSHIP;
+		page = StackPage.PLACEYOURSHIP;
 		shipPlacingEnabled = false;
 		shipPlacingDirection = "vertical"; // SHIPDIRECTION
 		shipNumber = 0;
@@ -78,7 +78,7 @@ public class GameSetupUIState extends UI {
 
 	public void initialize() {
 
-		panel = UI.createJPanelWithBackground(main.background);
+		panel = paintMainPanel(main.background);
 		panel.setLayout(new BorderLayout(0, 0));
 		panel.setPreferredSize(new Dimension(1024, 768));
 
@@ -191,7 +191,7 @@ public class GameSetupUIState extends UI {
 		JPanel player1 = new JPanel();
 		player1.setPreferredSize(new Dimension(300, 300));
 		// bg of battle table1
-		player1 = UI.createJPanelWithBg("bg/oceanbg.png", 300, 300);
+		player1 = paintSubPanel("bg/oceanbg.png", 300, 300);
 
 		JPanel topP1 = new JPanel(); // Panel for label "Place your ships!"
 		topP1.setPreferredSize(new Dimension(300, 100));
@@ -815,7 +815,7 @@ public class GameSetupUIState extends UI {
 
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		main.replaceCurrentPanel(panel);
 		JOptionPane.showMessageDialog(main, "Welcome, " + main.player.getName());
 		main.setEnabled(true);
@@ -823,7 +823,7 @@ public class GameSetupUIState extends UI {
 
 	@Override
 	public void leave() {
-		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
 		main.setEnabled(false);
 
 	}

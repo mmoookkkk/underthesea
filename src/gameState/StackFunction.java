@@ -28,10 +28,10 @@ public class StackFunction {
 	//Pop the stackedGameState until the destination state is met
 	public void popStateUntil(String destStateString) {
 		//If already at destination state, do nothing
-		if(((UI)stackedGameState.peek()).getStateString().equals(destStateString)) return;
+		if(((UI)stackedGameState.peek()).page.equals(destStateString)) return;
 		//If no state with respect to the destination string available, do nothing
 		if(!this.containState(destStateString)) return;
-		while(!((UI)stackedGameState.peek()).getStateString().equals(destStateString)) {
+		while(!((UI)stackedGameState.peek()).page.equals(destStateString)) {
 			stackedGameState.pop().leave();
 		}
 		//Reveal the destination state
@@ -79,7 +79,7 @@ public class StackFunction {
 	private boolean containState(String searchingString) {
 		ArrayList<String> stateString = new ArrayList<String>();
 		for(StackPage state : stackedGameState) {
-			stateString.add(((UI)state).getStateString());
+			stateString.add(((UI)state).page);
 		}
 		if(stateString.contains(searchingString)) return true;
 		else return false;

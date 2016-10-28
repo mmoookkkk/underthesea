@@ -69,9 +69,9 @@ public class GameUIState extends UI {
 
 	public GameUIState(Main main) {
 		super(main);
-		stateString = StackPage.BATTLE;
+		page = StackPage.BATTLE;
 
-		panel = UI.createJPanelWithBackground(main.background);
+		panel = paintMainPanel(main.background);
 		panel.setLayout(new BorderLayout(0, 0));
 		panel.setPreferredSize(new Dimension(1024, 768)); // 768-568-100
 
@@ -174,7 +174,7 @@ public class GameUIState extends UI {
 
 		leftCol.setOpaque(false);
 
-		JPanel player1 = UI.createJPanelWithBg("bg/oceanbg.png", 300, 300);
+		JPanel player1 = paintSubPanel("bg/oceanbg.png", 300, 300);
 		player1.setPreferredSize(new Dimension(300, 300));
 
 		JPanel topP1 = new JPanel();
@@ -478,7 +478,7 @@ public class GameUIState extends UI {
 		JPanel gap3 = new JPanel();
 		gap3.setOpaque(false);
 		gap3.setPreferredSize(new Dimension(50, 250));
-		JPanel southPlayer2 = UI.createJPanelWithBg("bg/oceanbg.png", 300, 300);
+		JPanel southPlayer2 = paintSubPanel("bg/oceanbg.png", 300, 300);
 		southPlayer2.setPreferredSize(new Dimension(250, 250));
 		player2.add(gap3, BorderLayout.WEST);
 		player2.add(southPlayer2, BorderLayout.CENTER);
@@ -543,14 +543,14 @@ public class GameUIState extends UI {
 
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		main.replaceCurrentPanel(panel);
 		main.setEnabled(true);
 	}
 
 	@Override
 	public void leave() {
-		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
 		main.setEnabled(false);
 	}
 

@@ -21,9 +21,9 @@ import gameState.StackPage;
 public class WaitForConnectionUIState extends UI {
  
  //Test purpose
- public WaitForConnectionUIState() {
-	  stateString = StackPage.WAITFORCONNECTION;
- }
+// public WaitForConnectionUIState() {
+//	  page = StackPage.WAITFORCONNECTION;
+// }
  /**
   * @throws MalformedURLException 
   * @wbp.parser.constructor
@@ -32,7 +32,7 @@ public class WaitForConnectionUIState extends UI {
 
   super(main);
 
-  stateString = StackPage.WAITFORCONNECTION;
+  page = StackPage.WAITFORCONNECTION;
 
   dialog = new JDialog(main, "");
 
@@ -70,14 +70,14 @@ public class WaitForConnectionUIState extends UI {
  
  @Override
  public void launch() {
-  System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+  System.out.println(Thread.currentThread().getName() + ": entered " + page);
   dialog.setVisible(true);
   
  }
 
  @Override
  public void leave() {
-  System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+  System.out.println(Thread.currentThread().getName() + ": leaving " + page);
   dialog.dispose();
   
  }

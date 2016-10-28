@@ -19,15 +19,15 @@ import gameState.StackPage;
 public class GameSetupReadyUIState extends UI {
 	public JButton readyBtn;
 	
-	public GameSetupReadyUIState() {
-		stateString = StackPage.SHIPREADY;
-	}
+//	public GameSetupReadyUIState() {
+//		page = StackPage.SHIPREADY;
+//	}
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public GameSetupReadyUIState(Main main) {
 		super(main);
-		stateString = StackPage.SHIPREADY;
+		page = StackPage.SHIPREADY;
 		dialog = new JDialog(main);
 		dialog.setSize(300,  80);
 		dialog.setPreferredSize(new Dimension(300,80));
@@ -55,14 +55,14 @@ public class GameSetupReadyUIState extends UI {
 	
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		dialog.setVisible(true);
 		
 	}
 
 	@Override
 	public void leave() {
-		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
 		dialog.dispose();
 		
 	}

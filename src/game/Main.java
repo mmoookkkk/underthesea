@@ -52,7 +52,7 @@ import gameState.StackFunction;
 
 public class Main extends JFrame {
 	// public JFrame frame;
-	public final StackFunction GSM = new StackFunction();
+	public final StackFunction stack = new StackFunction();
 	public JPanel currentStatePanel;
 	public boolean isClient;
 	public boolean start = true;
@@ -103,7 +103,7 @@ public class Main extends JFrame {
 			song1chosen=false;
 		}
 		// Change UI state -> MAIN_MENU_STATE
-		GSM.setState(new LandingPage(this));
+		stack.setState(new LandingPage(this));
 		createSound();
 
 		song1.start();
@@ -236,10 +236,10 @@ public class Main extends JFrame {
 	}
 
 	public void returnToMainMenu() {
-		while (!GSM.stackedGameState.isEmpty()) {
-			GSM.popState();
+		while (!stack.stackedGameState.isEmpty()) {
+			stack.popState();
 		}
-		GSM.setState(new LandingPage(this));
+		stack.setState(new LandingPage(this));
 	}
 
 	public static Point getPopUpLocation(UI ui) {
@@ -347,7 +347,7 @@ public class Main extends JFrame {
 //			playerState = "EXPECT_SERVER_START_GAME";
 //			myTurn = false;
 //			setupClip.start();
-//			GSM.popState(); // Pop EndGameDialogUIState
+//			stack.popState(); // Pop EndGameDialogUIState
 //		}
 
 		public void resetGame() {
@@ -442,7 +442,7 @@ public class Main extends JFrame {
 								Thread.currentThread().getName() + ": The other client is not available. waiting...");
 						// Push UI state -> WAIT_FOR_CONNECTION_STATE
 						try {
-							GSM.pushState(new WaitForConnectionUIState(Main.this));
+							stack.pushState(new WaitForConnectionUIState(Main.this));
 						} catch (MalformedURLException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
@@ -458,9 +458,9 @@ public class Main extends JFrame {
 							; // Raise SynchronizationErrorException
 						// The other client has connected
 						// Pop UI state UNTIL MAIN_GAME_STATE
-						GSM.popStateUntil(StackPage.LANDINGPAGE);
+						stack.popStateUntil(StackPage.LANDINGPAGE);
 						// Push GAME_SETUP_READY_STATE
-						GSM.pushState(new GameSetupReadyUIState(Main.this));
+						stack.pushState(new GameSetupReadyUIState(Main.this));
 						out.println("CLIENT_PIC_" + picImage);
 						// Set "EXPECT_SERVER_GAME_SETUP"
 						playerState = "EXPECT_SERVER_GAME_SETUP";
@@ -478,14 +478,14 @@ public class Main extends JFrame {
 						initialize();
 						System.out.print("SENDING" + picImage);
 						out.println("CLIENT_NAME_" + player.getName());
-						GSM.popStateUntil(StackPage.LANDINGPAGE);
+						stack.popStateUntil(StackPage.LANDINGPAGE);
 						// Change UI state -> GAME_SETUP_STATE
 						gameSetupUI = new GameSetupUIState(Main.this);
 
 //						mainmenuClip.stop();
 //						setupClip.start();
 
-						GSM.changeState(gameSetupUI);
+						stack.changeState(gameSetupUI);
 						playerState = "START_GAME_SETUP";
 
 					case CommandString.SERVER_OPPONENT_NOT_READY:
@@ -494,7 +494,7 @@ public class Main extends JFrame {
 						// The other client is not ready
 						// Wait
 						// Push WAIT_FOR_OPPONENT_READY State
-						GSM.pushState(new WaitForOpponentReadyUIState(Main.this));
+						stack.pushState(new WaitForOpponentReadyUIState(Main.this));
 						gameSetupUI.b1.setIcon(createImageIcon("ready.png", 10, 10));
 						//need to be changed
 						break;
@@ -510,7 +510,7 @@ public class Main extends JFrame {
 							// Server is ready to start game
 							// Start the game
 							// Pop UI state until GAME_SETUP_STATE
-							GSM.popStateUntil(StackPage.PLACEYOURSHIP);
+							stack.popStateUntil(StackPage.PLACEYOURSHIP);
 
 //							setupClip.close();
 //							battleClip.start();
@@ -521,7 +521,7 @@ public class Main extends JFrame {
 															// decibels.
 							// Change UI state -> GAME_STATE
 							gameUI = new GameUIState(Main.this);
-							GSM.changeState(gameUI);
+							stack.changeState(gameUI);
 							playerState = "IDLE";
 							break;
 						}
@@ -578,7 +578,7 @@ public class Main extends JFrame {
 
 					case CommandString.SERVER_INDICATE_YOU_LOSE: // You lose the
 																	// game
-						GSM.pushState(new EndGameDialogUIState(Main.this, "You lose."));
+						stack.pushState(new EndGameDialogUIState(Main.this, "You lose."));
 						timer_turn_duration.stop();
 						// Add current score to accumulative score and reset
 						// current score
@@ -604,7 +604,7 @@ public class Main extends JFrame {
 															// game
 						initialize();
 						gameSetupUI = new GameSetupUIState(Main.this);
-						GSM.changeState(gameSetupUI);
+						stack.changeState(gameSetupUI);
 						if (timer_turn_duration != null)
 							timer_turn_duration.stop();
 						playerState = "START_GAME_SETUP";
@@ -655,7 +655,7 @@ public class Main extends JFrame {
 							if (currentScore == 16) {
 								// Win
 								out.println(CommandString.CLIENT_WIN);
-								GSM.pushState(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
+								stack.pushState(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
 								timer_turn_duration.stop();
 								// Add current score to accumulative score and
 								// reset current score

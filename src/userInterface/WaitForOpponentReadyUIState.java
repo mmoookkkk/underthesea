@@ -15,7 +15,7 @@ public class WaitForOpponentReadyUIState extends UI {
 	
 	public WaitForOpponentReadyUIState(Main main) {
 		super(main);
-		stateString = StackPage.WAITFOROPPONENT;
+		page = StackPage.WAITFOROPPONENT;
 		dialog = new JDialog(main, "");
 		dialog.setLocation(Main.getPopUpLocation(this));
 		dialog.setPreferredSize(new Dimension(300,50));
@@ -33,14 +33,14 @@ public class WaitForOpponentReadyUIState extends UI {
 	
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		dialog.setVisible(true);
 		
 	}
 
 	@Override
 	public void leave() {
-		System.out.println(Thread.currentThread().getName() + ": leaving " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
 		dialog.dispose();
 		
 	}

@@ -26,7 +26,7 @@ public class EndGameDialogUIState extends UI {
 	
 	public EndGameDialogUIState(Main main, String text) {
 		super(main);
-		stateString = StackPage.END;
+		page = StackPage.END;
 		dialog = new JDialog(main);
 		dialog.setSize(400, 300);
 		dialog.setPreferredSize(new Dimension(400, 300));
@@ -100,7 +100,7 @@ public class EndGameDialogUIState extends UI {
 
 	@Override
 	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + stateString);
+		System.out.println(Thread.currentThread().getName() + ": entered " + page);
 		dialog.setVisible(true);
 		
 	}
