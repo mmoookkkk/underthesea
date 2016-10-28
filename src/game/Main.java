@@ -774,8 +774,8 @@ public class Main extends JFrame {
 
 						} else if (input.indexOf("CLIENT_PIC") != -1) {
 							opponentPic = input.substring(input.lastIndexOf("_") + 1);
-							Main.this.repaint();
-							Main.this.revalidate();
+//							Main.this.repaint();
+//							Main.this.revalidate();
 
 						}
 					}

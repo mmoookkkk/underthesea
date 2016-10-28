@@ -161,6 +161,7 @@ public class LandingPage extends UI {
 
 		west1d.add(buttonp5);
 		profilephoto=player1;
+		main.picImage="character/player1b.png";
 		
 		buttonp1.addActionListener(new ActionListener() {
 			@Override

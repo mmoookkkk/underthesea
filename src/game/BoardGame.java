@@ -3,6 +3,7 @@ package game;
 import java.io.Serializable;
 
 
+
 import java.util.Arrays;
 
 import game.Square;
