@@ -509,7 +509,12 @@ public class Main extends JFrame {
 						// The other client has connected
 						// Pop UI state UNTIL MAIN_GAME_STATE
 						stack.popPage();
-						stack.pushPage(new PlaceYourShip(Main.this));
+						try {
+							stack.pushPage(new AreYouReady(Main.this));
+						} catch (MalformedURLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						out.println("CLIENT_PIC_" + picImage);
 						// Set "EXPECT_SERVER_GAME_SETUP"
 						playerState = "EXPECT_SERVER_GAME_SETUP";
