@@ -20,14 +20,8 @@ import gameState.StackPage;
 
 public class WaitForConnectionUIState extends UI {
  
- //Test purpose
-// public WaitForConnectionUIState() {
-//	  page = StackPage.WAITFORCONNECTION;
-// }
- /**
-  * @throws MalformedURLException 
-  * @wbp.parser.constructor
-  */
+
+
  public WaitForConnectionUIState(Main main) throws MalformedURLException {
 
   super(main);
@@ -36,11 +30,10 @@ public class WaitForConnectionUIState extends UI {
 
   dialog = new JDialog(main, "");
 
-  dialog.setSize(new Dimension(300,300));
 
   dialog.setPreferredSize(new Dimension(300,300));
 
-  dialog.setLocation(Main.getPopUpLocation(this));
+//  dialog.setLocation(Main.getPopUpLocation(this));
 
   initialize();
 

@@ -17,7 +17,7 @@ public class WaitForOpponentReadyUIState extends UI {
 		super(main);
 		page = StackPage.WAITFOROPPONENT;
 		dialog = new JDialog(main, "");
-		dialog.setLocation(Main.getPopUpLocation(this));
+//		dialog.setLocation(Main.getPopUpLocation(this));
 		dialog.setPreferredSize(new Dimension(300,50));
 		initialize();
 	}

@@ -19,9 +19,7 @@ import gameState.StackPage;
 public class GameSetupReadyUIState extends UI {
 	public JButton readyBtn;
 	
-//	public GameSetupReadyUIState() {
-//		page = StackPage.SHIPREADY;
-//	}
+
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -29,9 +27,9 @@ public class GameSetupReadyUIState extends UI {
 		super(main);
 		page = StackPage.SHIPREADY;
 		dialog = new JDialog(main);
-		dialog.setSize(300,  80);
+//		dialog.setSize(300,  80);
 		dialog.setPreferredSize(new Dimension(300,80));
-		dialog.setLocation(Main.getPopUpLocation(this));
+//		dialog.setLocation(Main.getPopUpLocation(this));
 		initialize();
 	}
 

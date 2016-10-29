@@ -41,9 +41,6 @@ public class LandingPage extends UI {
 	public ImageIcon profilephoto;
 	public JTextField profilename;
 	public static boolean checkbg=true;
-//	public LandingPage() {
-//		page = StackPage.LANDINGPAGE;
-//	}
 
 	public LandingPage(Main main) {
 
@@ -56,8 +53,6 @@ public class LandingPage extends UI {
 		
 		mainPanel = paintMainPanel(main.background);
 		
-//		mainPanel.setPreferredSize(new Dimension(1200, 800));
-
 		// game logo panel
 		JPanel north = new JPanel();
 		north.setPreferredSize(new Dimension(1200, 100));
@@ -292,6 +287,7 @@ public class LandingPage extends UI {
 			     main.background = Main.createImageIcon("bg/background2.png", 1024, 768).getImage();
 			     //Push this state and change MAIN_MENU_STATE to refresh the background
 			    
+
 			     main.stack.changeState(new LandingPage(main));
 			     if(main.song1chosen){
 			    	 main.song1.close();
@@ -330,7 +326,9 @@ public class LandingPage extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				main.player.setProfilePhoto(profilephoto);
+				if(nameField.getText()!=null){
 				main.player.setName(nameField.getText());
+				}
 				main.connect();
 			}
 		});
