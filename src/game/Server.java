@@ -24,9 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class Server {
-//	public ArrayList<Socket> socketList;
-//	public ArrayList<GameServer> gameServerList;
-//	public Socket socket1;
+
 	public GameServer gameServer;
 	public ServerSocket serverSocket;
 	public ExecutorService executor;
@@ -55,8 +53,7 @@ public class Server {
 	}
 	
 	public Server() throws IOException {
-//		socketList = new ArrayList<Socket>();
-//		gameServerList = new ArrayList<GameServer>();
+
 		
 		executor = Executors.newFixedThreadPool(20);
 		serverSocket = new ServerSocket(8000);

@@ -6,11 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
-
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,12 +17,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -253,11 +250,13 @@ public class LandingPage extends UI {
 			    
 			     main.background = Main.createImageIcon("bg/background1.png", 1024, 768).getImage();
 			     //Push this state and change MAIN_MENU_STATE to refresh the background
-			     main.stack.changeState(new LandingPage(main));
+			     main.stack.popPage();
+			     main.stack.pushPage(new LandingPage(main));
 			     if(!(main.song1chosen)){
 			    	 main.song2.close();
 			    	 main.createSound();
 			    	 main.song1.start();
+			    	 main.song1.loop(Clip.LOOP_CONTINUOUSLY);
 			    	 main.song1chosen=true;
 			     }
 			     
@@ -287,12 +286,13 @@ public class LandingPage extends UI {
 			     main.background = Main.createImageIcon("bg/background2.png", 1024, 768).getImage();
 			     //Push this state and change MAIN_MENU_STATE to refresh the background
 			    
-
-			     main.stack.changeState(new LandingPage(main));
+                 main.stack.popPage();
+			     main.stack.pushPage(new LandingPage(main));
 			     if(main.song1chosen){
 			    	 main.song1.close();
 			    	 main.createSound();
 			    	 main.song2.start();
+			    	 main.song2.loop(Clip.LOOP_CONTINUOUSLY);
 			    	 main.song1chosen=false;
 			     }
 			}

@@ -103,13 +103,14 @@ public class Main extends JFrame {
 			song1chosen=false;
 		}
 		// Change UI state -> MAIN_MENU_STATE
-		stack.setState(new LandingPage(this));
+		stack.pushPage(new LandingPage(this));
 		createSound();
 
 		song1.start();
+		song1.loop(Clip.LOOP_CONTINUOUSLY);
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("cursor_blue.png");
+		Image image = toolkit.getImage("cursor_ariel.png");
 		Point hotSpot = new Point(0, 0);
 		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "cursor");
 		this.setCursor(cursor);
@@ -225,7 +226,7 @@ public class Main extends JFrame {
 //	}
 	
 	public void insertHitEffect() throws LineUnavailableException{
-		File hitSound = new File("sound/hit.wav");
+		File hitSound = new File("sound/explosion-01.wav");
 		try {
 			AudioInputStream hitEffect = AudioSystem.getAudioInputStream(hitSound);
 			hitClip = AudioSystem.getClip();
@@ -285,10 +286,10 @@ public class Main extends JFrame {
 	}
 
 	public void returnToMainMenu() {
-		while (!stack.stackedGameState.isEmpty()) {
-			stack.popState();
+		while (!stack.stackedPage.isEmpty()) {
+			stack.popPage();
 		}
-		stack.setState(new LandingPage(this));
+		stack.pushPage(new LandingPage(this));
 	}
 
 	public static Point getPopUpLocation(UI ui) {
@@ -331,7 +332,7 @@ public class Main extends JFrame {
 		protected BufferedReader in;
 		protected ObjectOutputStream oos;
 		protected ObjectInputStream ois;
-		protected GameSetupUIState gameSetupUI;
+		protected PlaceYourShip gameSetupUI;
 		protected GameUIState gameUI;
 		protected boolean myTurn;
 		protected int accumulativeScore;
@@ -458,7 +459,7 @@ public class Main extends JFrame {
 			}
 
 			@Override
-			protected void process(final List<String> inputList) {
+			protected void process(final List<String> inputList){
 				// Client game logic
 				System.out.println(Thread.currentThread().getName() + ": process invoked");
 				System.out.println(Thread.currentThread().getName() + ": the size of inputList is " + inputList.size());
@@ -491,7 +492,7 @@ public class Main extends JFrame {
 								Thread.currentThread().getName() + ": The other client is not available. waiting...");
 						// Push UI state -> WAIT_FOR_CONNECTION_STATE
 						try {
-							stack.pushState(new WaitForConnectionUIState(Main.this));
+							stack.pushPage(new WaitForConnectionUIState(Main.this));
 						} catch (MalformedURLException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
@@ -507,9 +508,8 @@ public class Main extends JFrame {
 							; // Raise SynchronizationErrorException
 						// The other client has connected
 						// Pop UI state UNTIL MAIN_GAME_STATE
-						stack.popStateUntil(StackPage.LANDINGPAGE);
-						// Push GAME_SETUP_READY_STATE
-						stack.pushState(new GameSetupReadyUIState(Main.this));
+						stack.popPage();
+						stack.pushPage(new PlaceYourShip(Main.this));
 						out.println("CLIENT_PIC_" + picImage);
 						// Set "EXPECT_SERVER_GAME_SETUP"
 						playerState = "EXPECT_SERVER_GAME_SETUP";
@@ -527,14 +527,15 @@ public class Main extends JFrame {
 						initialize();
 						System.out.print("SENDING" + picImage);
 						out.println("CLIENT_NAME_" + player.getName());
-						stack.popStateUntil(StackPage.LANDINGPAGE);
+						stack.popPage();
+//						stack.popPageUntil(StackPage.LANDINGPAGE);
 						// Change UI state -> GAME_SETUP_STATE
-						gameSetupUI = new GameSetupUIState(Main.this);
+						gameSetupUI = new PlaceYourShip(Main.this);
 
 //						mainmenuClip.stop();
 //						setupClip.start();
-
-						stack.changeState(gameSetupUI);
+//                        stack.popPage();
+						stack.pushPage(gameSetupUI);
 						playerState = "START_GAME_SETUP";
 
 					case CommandString.SERVER_OPPONENT_NOT_READY:
@@ -543,7 +544,7 @@ public class Main extends JFrame {
 						// The other client is not ready
 						// Wait
 						// Push WAIT_FOR_OPPONENT_READY State
-						stack.pushState(new WaitForOpponentReadyUIState(Main.this));
+						stack.pushPage(new WaitForOpponentReadyUIState(Main.this));
 						gameSetupUI.b1.setIcon(createImageIcon("ready.png", 10, 10));
 						//need to be changed
 						break;
@@ -559,7 +560,8 @@ public class Main extends JFrame {
 							// Server is ready to start game
 							// Start the game
 							// Pop UI state until GAME_SETUP_STATE
-							stack.popStateUntil(StackPage.PLACEYOURSHIP);
+							stack.popPage();
+//							stack.popPageUntil(StackPage.PLACEYOURSHIP);
 
 //							setupClip.close();
 //							battleClip.start();
@@ -570,7 +572,8 @@ public class Main extends JFrame {
 															// decibels.
 							// Change UI state -> GAME_STATE
 							gameUI = new GameUIState(Main.this);
-							stack.changeState(gameUI);
+//							stack.popPage();
+							stack.pushPage(gameUI);
 							playerState = "IDLE";
 							break;
 						}
@@ -627,7 +630,7 @@ public class Main extends JFrame {
 
 					case CommandString.SERVER_INDICATE_YOU_LOSE: // You lose the
 																	// game
-						stack.pushState(new EndGameDialogUIState(Main.this, "You lose."));
+						stack.pushPage(new EndGameDialogUIState(Main.this, "You lose."));
 						timer_turn_duration.stop();
 						// Add current score to accumulative score and reset
 						// current score
@@ -652,8 +655,9 @@ public class Main extends JFrame {
 					case CommandString.SERVER_RESET_GAME: // Somebody reset the
 															// game
 						initialize();
-						gameSetupUI = new GameSetupUIState(Main.this);
-						stack.changeState(gameSetupUI);
+						gameSetupUI = new PlaceYourShip(Main.this);
+						stack.popPage();
+						stack.pushPage(gameSetupUI);
 						if (timer_turn_duration != null)
 							timer_turn_duration.stop();
 						playerState = "START_GAME_SETUP";
@@ -685,12 +689,7 @@ public class Main extends JFrame {
 									e.printStackTrace();
 								}
 
-//								try {
-//									Thread.sleep(100);
-//								} catch (InterruptedException e1) {
-//									// TODO Auto-generated catch block
-//									e1.printStackTrace();
-//								}
+
 							} else { // If not hit
 								gridTable.attackingTable[y][x].clicked = true;
 								// Update UI (not hit)
@@ -703,18 +702,11 @@ public class Main extends JFrame {
 									e.printStackTrace();
 								}
 
-//								try {
-//									Thread.sleep(100);
-//								} catch (InterruptedException e1) {
-//									// TODO Auto-generated catch block
-//									e1.printStackTrace();
-//								}
-
 							}
 							if (currentScore == 16) {
 								// Win
 								out.println(CommandString.CLIENT_WIN);
-								stack.pushState(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
+								stack.pushPage(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
 								timer_turn_duration.stop();
 								// Add current score to accumulative score and
 								// reset current score
