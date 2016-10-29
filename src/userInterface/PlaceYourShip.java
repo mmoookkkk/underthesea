@@ -31,7 +31,7 @@ public class PlaceYourShip extends UI {
 	public PlaceYourShip(Main main) {
 
 		super(main);
-		page = StackPage.SHIPREADY;
+		page = StackPage.PLACEYOURSHIP;
 
 		mainPanel = paintMainPanel(main.background);
 		mainPanel.setLayout(new BorderLayout(0, 0));
