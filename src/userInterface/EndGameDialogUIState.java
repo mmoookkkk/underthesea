@@ -29,7 +29,7 @@ public class EndGameDialogUIState extends UI {
 		page = StackPage.END;
 		dialog = new JDialog(main);
 		dialog.setPreferredSize(new Dimension(400, 300));
-//		dialog.setLocation(Main.getPopUpLocation(this));
+		dialog.setLocation(Main.getPopUpLocation(this));
 		dialog.getContentPane().setBackground(Color.BLACK);
 		initialize(text);
 		

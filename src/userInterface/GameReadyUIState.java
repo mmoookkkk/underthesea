@@ -26,9 +26,8 @@ public class GameReadyUIState extends UI {
 		super(main);
 		page = StackPage.SHIPREADY;
 		dialog = new JDialog(main, "Ready!");
-//		dialog.setSize(300, 80);
 		dialog.setPreferredSize(new Dimension(300,80));
-//		dialog.setLocation(Main.getPopUpLocation(this));
+		dialog.setLocation(Main.getPopUpLocation(this));
 		initialize();
 	}
 
@@ -39,7 +38,7 @@ public class GameReadyUIState extends UI {
 		readyBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.client.startGameSetup();
+				main.client.startPlaceShip();
 				readyBtn.setText("Waiting for your opponent...");
 				readyBtn.setEnabled(false);
 				

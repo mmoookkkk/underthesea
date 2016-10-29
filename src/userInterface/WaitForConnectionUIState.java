@@ -33,7 +33,7 @@ public class WaitForConnectionUIState extends UI {
 
   dialog.setPreferredSize(new Dimension(300,300));
 
-//  dialog.setLocation(Main.getPopUpLocation(this));
+  dialog.setLocation(Main.getPopUpLocation(this));
 
   initialize();
 

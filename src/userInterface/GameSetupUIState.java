@@ -71,8 +71,6 @@ public class GameSetupUIState extends UI {
 		shipPlacingEnabled = false;
 		shipPlacingDirection = "vertical"; // SHIPDIRECTION
 		shipNumber = 0;
-//		main.start = false;
-		// main.insertBGM("login.wav");
 		initialize();
 	}
 
@@ -280,7 +278,7 @@ public class GameSetupUIState extends UI {
 										cancelButton.setEnabled(true);
 									}
 
-									main.insertBGM("sound/ship.wav");
+//									main.insertBGM("sound/ship.wav");
 									try {
 										Thread.sleep(1000);
 									} catch (InterruptedException e1) {

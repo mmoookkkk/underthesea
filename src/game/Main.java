@@ -63,7 +63,7 @@ public class Main extends JFrame {
 	public String picImage;
 	public static boolean song1chosen;
 
-	Clip  losingClip, winningClip;
+	Clip  losingClip, winningClip,hitClip,missClip;
 	public static Clip song1,song2;
 	public int point_opponent = 0;
 
@@ -198,30 +198,79 @@ public class Main extends JFrame {
 
 	}
 
-	public void insertBGM(String sound) {
-		File soundFile = new File(sound);
-		AudioInputStream audioIn = null;
-
+//	public void insertBGM(String sound) {
+//		File soundFile = new File(sound);
+//		AudioInputStream audioIn = null;
+//
+//		try {
+//			audioIn = AudioSystem.getAudioInputStream(soundFile);
+//			Clip clip = AudioSystem.getClip();
+//			clip.open(audioIn);
+//			if (start) {
+//
+//				clip.loop(Clip.LOOP_CONTINUOUSLY);
+//
+//			} else {
+//
+//				clip.start();
+//
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (UnsupportedAudioFileException e) {
+//			e.printStackTrace();
+//		} catch (LineUnavailableException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+	public void insertHitEffect() throws LineUnavailableException{
+		File hitSound = new File("sound/hit.wav");
 		try {
-			audioIn = AudioSystem.getAudioInputStream(soundFile);
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioIn);
-			if (start) {
-
-				clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-			} else {
-
-				clip.start();
-
+			AudioInputStream hitEffect = AudioSystem.getAudioInputStream(hitSound);
+			hitClip = AudioSystem.getClip();
+			hitClip.open(hitEffect);
+			hitClip.start();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			hitClip.close();
+			
 		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LineUnavailableException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		};
+	}
+	
+
+	public void insertMissEffect() throws LineUnavailableException{
+		File missSound = new File("sound/miss.wav");
+		try {
+			AudioInputStream missEffect = AudioSystem.getAudioInputStream(missSound);
+			missClip = AudioSystem.getClip();
+			missClip.open(missEffect);
+			missClip.start();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			missClip.close();
+			
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
 	}
 
 	public void replaceCurrentPanel(JPanel panel) {
@@ -329,7 +378,7 @@ public class Main extends JFrame {
 
 		}
 
-		public void startGameSetup() {
+		public void startPlaceShip() {
 			out.println(CommandString.CLIENT_GAME_SETUP_READY);
 			System.out
 					.println(Thread.currentThread().getName() + ": " + CommandString.CLIENT_GAME_SETUP_READY + " sent");
@@ -629,27 +678,37 @@ public class Main extends JFrame {
 								hitSquareLabel.setIcon(createImageIcon("effect/hit.png", 37, 37));
 								gameUI.P1Score.setText(++currentScore + "");
 
-								insertBGM("sound/hit.wav");
-
 								try {
-									Thread.sleep(100);
-								} catch (InterruptedException e1) {
+									insertHitEffect();
+								} catch (LineUnavailableException e) {
 									// TODO Auto-generated catch block
-									e1.printStackTrace();
+									e.printStackTrace();
 								}
+
+//								try {
+//									Thread.sleep(100);
+//								} catch (InterruptedException e1) {
+//									// TODO Auto-generated catch block
+//									e1.printStackTrace();
+//								}
 							} else { // If not hit
 								gridTable.attackingTable[y][x].clicked = true;
 								// Update UI (not hit)
 								hitSquareLabel.setIcon(createImageIcon("effect/miss.png", 37, 37));
 
-								insertBGM("sound/miss.wav");
-
 								try {
-									Thread.sleep(100);
-								} catch (InterruptedException e1) {
+									insertMissEffect();
+								} catch (LineUnavailableException e) {
 									// TODO Auto-generated catch block
-									e1.printStackTrace();
+									e.printStackTrace();
 								}
+
+//								try {
+//									Thread.sleep(100);
+//								} catch (InterruptedException e1) {
+//									// TODO Auto-generated catch block
+//									e1.printStackTrace();
+//								}
 
 							}
 							if (currentScore == 16) {
