@@ -2,13 +2,11 @@ package game;
 
 public class Ship {
 	public String direction;
-	public int shipNumber;
 	boolean shipSunk;
 	Square[] squareOfThisShip;
 	
-	public Ship(int shipNumber, String direction) {
+	public Ship(String direction) {
 		squareOfThisShip = new Square[4];
-		this.shipNumber = shipNumber;
 		this.direction = direction;
 	}
 	

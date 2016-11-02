@@ -33,6 +33,8 @@ public abstract class UI implements StackPage{
 			}
 			
 		};
+		
+		
 	}
 	
 	public static JPanel paintSubPanel(String fileName, int width, int height) {

@@ -34,7 +34,7 @@ public class GridTable {
 		return hitAndSunk;
 	}
 		
-	public void placeShip(Ship ship,int shipNumber,SquareLabel[] position) {
+	public void placeShip(Ship ship,int currentShipNumber,SquareLabel[] position) {
 		Square[] gridForThisShip = new Square[4];
 		for(int i=0; i<4; i++) {
 			gridForThisShip[i] = myCurrentTable[position[i].getYIndex()][position[i].getXIndex()];
@@ -42,7 +42,8 @@ public class GridTable {
 		}
 		Arrays.sort(gridForThisShip);
 		ship.setSquareOfThisShip(gridForThisShip);
-        ships[shipNumber] = ship;
+        ships[currentShipNumber] = ship;
+     
 	}
 	
 	public Ship getShip(int shipNumber) {
@@ -61,21 +62,19 @@ public class GridTable {
 		return false;
 	}
 	
-	public void removeShip(Ship ship) {
-		if(ship!=null){
-		ships[ship.shipNumber] = null;
-		Square [] squareOfThisShip = ship.getSquareOfThisShip();
-		for(int i=0;i<4;i++) {
-			squareOfThisShip[i].hasShip = false;
-			squareOfThisShip[i].label.setIcon(null);
-			squareOfThisShip[i].label.revalidate();
-		}
-		}
-	}
+
 	
 	public void removeAllShip() {
 		for(int i=0;i<4;i++) {
-			removeShip(ships[i]);
+			if(ships[i]!=null){
+			ships[i] = null;
+			Square [] squareOfThisShip = ships[i].getSquareOfThisShip();
+			for(int j=0;j<4;j++) {
+				squareOfThisShip[j].hasShip = false;
+				squareOfThisShip[j].label.setIcon(null);
+				squareOfThisShip[j].label.revalidate();
+			}
+			}
 		}
 	}
 	

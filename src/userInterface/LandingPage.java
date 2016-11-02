@@ -326,7 +326,7 @@ public class LandingPage extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				main.player.setProfilePhoto(profilephoto);
-				if(nameField.getText()!=null){
+				if(!nameField.getText().isEmpty()){
 				main.player.setName(nameField.getText());
 				}
 				main.connect();

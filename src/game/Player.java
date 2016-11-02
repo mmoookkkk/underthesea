@@ -8,7 +8,7 @@ public class Player {
 	
 	public Player(){
 		profilePhoto=new ImageIcon("character/player1b");
-		name="Anonymous";
+		this.name="Anonymous";
 	}
 	public void setName(String name) {
 		this.name = name;

@@ -329,7 +329,7 @@ public class GameUIState extends UI {
 		reset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.client.resetGame();
+//				main.client.resetGame();
 			}
 		});
 		
@@ -501,18 +501,19 @@ public class GameUIState extends UI {
 		}
 
 		// Set ships in myBoardLabel
-		for (Ship ship : main.client.gridTable.getAllShips()) {
-			int i = 1;
-			for (Square square : ship.getSquareOfThisShip()) {
-				if (ship.direction.equals("horizontal")) {
-					myBoardLabel[square.getY()][square.getX()].setIcon(
-							new ImageIcon("ship/horizontal/ship" + (ship.shipNumber + 1) + "" + (i++) + ".png"));
-				} else {
-					myBoardLabel[square.getY()][square.getX()]
-							.setIcon(new ImageIcon("ship/vertical/ship" + (ship.shipNumber + 1) + "" + (i++) + ".png"));
-				}
-			}
-		}
+		//aow ork pap deaw aow klub ma mhai cus error
+//		for (Ship ship : main.client.gridTable.getAllShips()) {
+//			int i = 1;
+//			for (Square square : ship.getSquareOfThisShip()) {
+//				if (ship.direction.equals("horizontal")) {
+//					myBoardLabel[square.getY()][square.getX()].setIcon(
+//							new ImageIcon("ship/horizontal/ship" + (ship.shipNumber + 1) + "" + (i++) + ".png"));
+//				} else {
+//					myBoardLabel[square.getY()][square.getX()]
+//							.setIcon(new ImageIcon("ship/vertical/ship" + (ship.shipNumber + 1) + "" + (i++) + ".png"));
+//				}
+//			}
+//		}
 
 		/* RIGHT BORDER */
 		JPanel east = new JPanel();

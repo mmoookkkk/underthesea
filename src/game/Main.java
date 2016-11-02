@@ -62,6 +62,7 @@ public class Main extends JFrame {
 	public Image background;
 	public String picImage;
 	public static boolean song1chosen;
+//	JFrame serverFrame;
 
 	Clip  losingClip, winningClip,hitClip,missClip;
 	public static Clip song1,song2;
@@ -73,23 +74,34 @@ public class Main extends JFrame {
 	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
 				Main main = new Main();
-				main.setVisible(true);
-			}
-		});
+				main.setVisible(true);	
+//			}
+//		});
+		
+		
 	}
 
 	/**
 	 * Create the application.
 	 */
+
 	public Main() {
 		super();
 		setBounds(100, 100, 1024, 768);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		            client.exitGame();
+		            System.exit(0);
+		      
+		    }
+		});
 		// insertBGM("login.wav");
 		// start = false;
 		player = new Player();
@@ -328,8 +340,8 @@ public class Main extends JFrame {
 	public class GameClient implements Runnable {
 		// P2P case field
 		protected Socket socket;
-		protected PrintWriter out;
-		protected BufferedReader in;
+		public PrintWriter out;
+		public BufferedReader in;
 		protected ObjectOutputStream oos;
 		protected ObjectInputStream ois;
 		protected PlaceYourShip gameSetupUI;
@@ -380,16 +392,20 @@ public class Main extends JFrame {
 		}
 
 		public void startPlaceShip() {
-			out.println(CommandString.CLIENT_GAME_SETUP_READY);
+			out.println("CLIENT_ReadyToPlaceShip");
 			System.out
-					.println(Thread.currentThread().getName() + ": " + CommandString.CLIENT_GAME_SETUP_READY + " sent");
+					.println(Thread.currentThread().getName() + ": " + "CLIENT_ReadyToPlaceShip" + " sent");
 		}
 
 		public void startGame() {
-			out.println(CommandString.CLIENT_GAME_START_READY);
+			out.println("CLIENT_ReadyToBattle");
 			System.out
-					.println(Thread.currentThread().getName() + ": " + CommandString.CLIENT_GAME_START_READY + " sent");
+					.println(Thread.currentThread().getName() + ": " + "CLIENT_ReadyToBattle" + " sent");
 			playerState = "EXPECT_SERVER_START_GAME";
+		}
+		
+		public void exitGame(){
+			out.println("CLIENT_Exit");
 		}
 
 //		public void requestNewGame() {
@@ -400,11 +416,11 @@ public class Main extends JFrame {
 //			stack.popState(); // Pop EndGameDialogUIState
 //		}
 
-		public void resetGame() {
-			out.println(CommandString.CLIENT_RESET_GAME);
-			playerState = "EXPECT_SERVER_START_GAME";
-			myTurn = false;
-		}
+//		public void resetGame() {
+//			out.println(CommandString.CLIENT_RESET_GAME);
+//			playerState = "EXPECT_SERVER_START_GAME";
+//			myTurn = false;
+//		}
 
 		public void mark(int y, int x) {
 			// Mark the square y,x
@@ -423,16 +439,16 @@ public class Main extends JFrame {
 			return myTurn;
 		}
 
-		protected GameClient(GameServer gameServer) {
-			// this.gameServer = gameServer;
+		protected GameClient(ServerThread serverThread) {
+			// this.gameServer = serverThread;
 			player = new Player();
 			gridTable = new GridTable();
 			// isWithLocalServer = true;
 
 		}
 
-		// public void setLocalServer(GameServer gameServer) {
-		// // this.gameServer = gameServer;
+		// public void setLocalServer(ServerThread serverThread) {
+		// // this.gameServer = serverThread;
 		//
 		// }
 
@@ -469,7 +485,7 @@ public class Main extends JFrame {
 					}
 					switch (input) {
 
-					case CommandString.SERVER_OTHER_CLIENT_NOT_AVAILABLE: // If
+					case "SERVER_NoOpponent": // If
 																			// another
 																			// client
 																			// has
@@ -502,7 +518,7 @@ public class Main extends JFrame {
 						// string SERVER_ANOTHER_CLIENT_AVAILABLE to all clients
 						break;
 
-					case CommandString.SERVER_OTHER_CLIENT_AVAILABLE:
+					case "SERVER_HaveOpponent":
 						if (!playerState.equals("NULL_STATE")
 								|| !playerState.equals("EXPECT_SERVER_OTHER_CLIENT_AVAILABLE"))
 							; // Raise SynchronizationErrorException
@@ -520,10 +536,10 @@ public class Main extends JFrame {
 						playerState = "EXPECT_SERVER_GAME_SETUP";
 						// Wait for the player to press Ready...
 						// System.out.println("name :" + player.name);
-						// out.println("CLIENT_NAME_" + player.getName());
+//						 out.println("CLIENT_NAME_" + player.getName());
 						break;
 
-					case CommandString.SERVER_START_GAME_SETUP:
+					case "SERVER_ReadyToPlaceShip":
 						if (!playerState.equals("EXPECT_SERVER_GAME_SETUP"))
 							; // Raise SynchronizationErrorException
 						// Server is ready to start game setup
@@ -531,6 +547,7 @@ public class Main extends JFrame {
 						// Pop UI state until MAIN_MENU_STATE
 						initialize();
 						System.out.print("SENDING" + picImage);
+//						out.println("CLIENT_PIC_" + picImage);
 						out.println("CLIENT_NAME_" + player.getName());
 						stack.popPage();
 //						stack.popPageUntil(StackPage.LANDINGPAGE);
@@ -543,7 +560,7 @@ public class Main extends JFrame {
 						stack.pushPage(gameSetupUI);
 						playerState = "START_GAME_SETUP";
 
-					case CommandString.SERVER_OPPONENT_NOT_READY:
+					case "SERVER_OpponentNotReady":
 						if (!playerState.equals("EXPECT_SERVER_START_GAME"))
 							return; // If not pressing ready yet -> do nothing
 						// The other client is not ready
@@ -554,12 +571,12 @@ public class Main extends JFrame {
 						//need to be changed
 						break;
 
-					case CommandString.SERVER_OPPONENT_READY:
+					case "SERVER_OpponentReady":
 						gameSetupUI.b2.setIcon(createImageIcon("ready.png", 10, 10));
 						//need to be changed
 						break;
 
-					case CommandString.SERVER_START_GAME:
+					case "SERVER_ReadyToBattle":
 						if (playerState.equals("EXPECT_SERVER_START_GAME")
 								|| playerState.equals("START_GAME_SETUP")) {
 							// Server is ready to start game
@@ -584,7 +601,7 @@ public class Main extends JFrame {
 						}
 						// TODO
 						break;
-					case CommandString.SERVER_GRANT_TURN: // Server give you a
+					case "SERVER_YourTurn": // Server give you a
 						// turn
 			if (playerState.equals("IDLE")) {
 				playerState = "PLAYING";
@@ -628,12 +645,12 @@ public class Main extends JFrame {
 							break;
 						}
 
-					case CommandString.SERVER_INDICATE_YOU_WIN: // You won the
-																// game
+//					case CommandString.SERVER_INDICATE_YOU_WIN: // You won the
+//																// game
+//
+//						break;
 
-						break;
-
-					case CommandString.SERVER_INDICATE_YOU_LOSE: // You lose the
+					case "SERVER_YouLose": // You lose the
 																	// game
 						stack.pushPage(new EndGameDialogUIState(Main.this, "You lose."));
 						timer_turn_duration.stop();
@@ -657,8 +674,7 @@ public class Main extends JFrame {
 						}
 						break;
 
-					case CommandString.SERVER_RESET_GAME: // Somebody reset the
-															// game
+					case "SERVER_Reset": 
 						initialize();
 						gameSetupUI = new PlaceYourShip(Main.this);
 						stack.popPage();
@@ -710,7 +726,7 @@ public class Main extends JFrame {
 							}
 							if (currentScore == 16) {
 								// Win
-								out.println(CommandString.CLIENT_WIN);
+								out.println("CLIENT_IWin");
 								stack.pushPage(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
 								timer_turn_duration.stop();
 								// Add current score to accumulative score and
