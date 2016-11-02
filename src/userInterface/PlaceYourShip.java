@@ -117,12 +117,12 @@ public class PlaceYourShip extends UI {
 							
 					
 									if (shipPlacingDirection.equals("right")) {
-										ImageIcon v=Main.createImageIcon("boat/boat-" + (i+1) + ".png",64,44);
+										ImageIcon v=Main.createImageIcon("boat/horizontal-" + (i+1) + ".png",64,44);
 ;										squareLabel.setIcon(v);
 										
 
 									} else {
-										ImageIcon h=Main.createImageIcon("boat/boat-" + (i+1) + ".png",64,44);
+										ImageIcon h=Main.createImageIcon("boat/vertical-" + (i+1) + ".png",64,44);
 									   squareLabel.setIcon(h);
 										
 									}
