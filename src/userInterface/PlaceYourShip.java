@@ -8,9 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -484,12 +487,28 @@ public class PlaceYourShip extends UI {
 	}
 
 	@Override
-	public void launch() {
-		System.out.println(Thread.currentThread().getName() + ": entered " + page);
-		main.replaceCurrentPanel(mainPanel);
-		JOptionPane.showMessageDialog(main, "Mai Welcome, " + main.player.getName());
-		main.setEnabled(true);
-	}
+	 public void launch() {
+	  
+	  System.out.println(Thread.currentThread().getName() + ": entered " + page);
+	  main.replaceCurrentPanel(mainPanel);
+
+	  
+	    URL url = null;
+	  try {
+	   url = new URL("http://i.giphy.com/tWJno5I1qXdni.gif");
+	  } catch (MalformedURLException e) {
+	   // TODO Auto-generated catch block
+	   e.printStackTrace();
+	  }
+	     
+	  Icon icon = new ImageIcon(url);
+	        JOptionPane.showMessageDialog(
+	                      null,
+	                      "",
+	                      "WELCOME TO UNDER THE SEA!!!  "+main.player.getName(), JOptionPane.INFORMATION_MESSAGE,
+	                      icon);
+	        main.setEnabled(true);
+	 }
 
 	@Override
 	public void leave() {
