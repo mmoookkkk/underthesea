@@ -566,7 +566,12 @@ public class Main extends JFrame {
 						// The other client is not ready
 						// Wait
 						// Push WAIT_FOR_OPPONENT_READY State
-						stack.pushPage(new WaitForOpponentReadyUIState(Main.this));
+						try {
+							stack.pushPage(new WaitForOpponentReadyUIState(Main.this));
+						} catch (MalformedURLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						gameSetupUI.b1.setIcon(createImageIcon("ready.png", 10, 10));
 						//need to be changed
 						break;
