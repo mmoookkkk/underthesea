@@ -63,7 +63,6 @@ public class GridTable {
 	public void removeAllShip() {
 		for(int i=0;i<4;i++) {
 			if(ships[i]!=null){
-			ships[i] = null;
 			Square [] squareOfThisShip = ships[i].getSquareOfThisShip();
 			for(int j=0;j<4;j++) {
 				squareOfThisShip[j].hasShip = false;
@@ -71,6 +70,7 @@ public class GridTable {
 				squareOfThisShip[j].label.revalidate();
                 squareOfThisShip[j].label.repaint();
 			}
+			ships[i] = null;
 			}
 		}
 	}

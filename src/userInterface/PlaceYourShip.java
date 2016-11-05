@@ -231,6 +231,11 @@ public class PlaceYourShip extends UI {
 		buttonrandom.setOpaque(false);
 		buttonrandom.setContentAreaFilled(false);
 		buttonrandom.setBorderPainted(false);
+		buttonrandom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+	
+			}
+		});
 		west3.add(buttonrandom, BorderLayout.EAST);
 
 		JPanel east = new JPanel();
