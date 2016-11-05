@@ -121,8 +121,9 @@ public class MainGame extends UI {
 							SquareLabel squareLabel = (SquareLabel) e.getSource();
 							int y = squareLabel.y;
 							int x = squareLabel.x;
-							if (opponentTable[y][x].getSquare().isClicked())
+							if (opponentTable[y][x].getSquare().isClicked()){
 								return;
+							}
 							main.clientThread.attack(y, x);
 
 							main.clientThread.countDownTime.stop();
