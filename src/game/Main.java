@@ -377,7 +377,7 @@ public class Main extends JFrame{
 					if(inputList.get(i)!=null){
 						if(inputList.get(i).contains("CLIENT_NAME")){
 							opponentName = inputList.get(i).substring(inputList.get(i).lastIndexOf("_") + 1);
-							placeYourShipPage.p2.setText(opponentName);
+//							placeYourShipPage.p2.setText(opponentName);
 							Main.this.repaint();
 							Main.this.revalidate();
 						}else if(inputList.get(i).contains("CLIENT_PIC")){
@@ -421,17 +421,23 @@ public class Main extends JFrame{
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-//							placeYourShipPage.b1.setIcon(createImageWithSize("ready.png", 10, 10));
+							
+//							
 						}else if(inputList.get(i).equals("SERVER_OpponentReadyToBattle")){
-//							placeYourShipPage.b2.setIcon(createImageWithSize("ready.png", 10, 10));
-						}else if(inputList.get(i).equals("SERVER_ReadyToBattle")){
+							placeYourShipPage.buttonnotready.setIcon(createImageWithSize("text/ready.png", 300, 100));
+						}
+						else if(inputList.get(i).equals("SERVER_changelabelplease!")){
+							placeYourShipPage.buttonnotready.setIcon(createImageWithSize("text/ready.png", 300, 100));
+							}else if(inputList.get(i).equals("SERVER_ReadyToBattle")){
 							if (clientState.equals("waitingToBattle")){
+
 								System.out.println("//////////waitingToBattle/////////////");
 								stack.popPage();
 								battlePage = new MainGame(Main.this);
 								stack.pushPage(battlePage);
 								clientState = "pause";
 							}
+							
 						}else if(inputList.get(i).equals("SERVER_YourTurn")){
 							if (clientState.equals("pause")) {
 								clientState = "continue";

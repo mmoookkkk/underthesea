@@ -154,12 +154,13 @@ public class ServerThread implements Runnable{
 								if(lock.getName().equals("readyToBattle")) {
 									if(lock.getCounter() == 0) {
 										out.println("SERVER_OpponentNotReadyToBattle");
-//										if(clientNum == 1){
-//											client1SocketThread.out.println("SERVER_OpponentReady");
-//										}
-//										else{
-//											client2SocketThread.out.println("SERVER_OpponentReady");
-//										}
+										if(clientNum == 1) {
+											client2SocketThread.out.println("SERVER_changelabelplease!");
+										}
+										else {
+											client1SocketThread.out.println("SERVER_changelabelplease!");
+										}
+//									
 									}
 									synchronized(lock) {
 										lock.incrementCounter();

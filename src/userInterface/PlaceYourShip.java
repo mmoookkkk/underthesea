@@ -39,6 +39,7 @@ public class PlaceYourShip extends UI {
 	public int currentShipNumber;
 	public JButton buttonready;
 	public JButton buttonclear;
+	public JLabel buttonnotready;
 
 	public PlaceYourShip(Main main) {
 
@@ -64,7 +65,7 @@ public class PlaceYourShip extends UI {
 		west.add(west1, BorderLayout.NORTH);
 
 		ImageIcon notready = Main.createImageWithSize("text/notready.png", 300, 100);
-		JLabel buttonnotready = new JLabel("");
+		buttonnotready = new JLabel("");
 		buttonnotready.setIcon(notready);
 		west1.add(buttonnotready, BorderLayout.CENTER);
 
@@ -215,7 +216,6 @@ public class PlaceYourShip extends UI {
 				main.clientThread.gridTable.removeAllShip();
 				mainPanel.repaint();
 				currentShipNumber = 0;
-				buttonclear.setEnabled(false);
 				buttonready.setEnabled(false);
 //			lblPressReady.setText("");
 			}
@@ -232,9 +232,53 @@ public class PlaceYourShip extends UI {
 		buttonrandom.setContentAreaFilled(false);
 		buttonrandom.setBorderPainted(false);
 		buttonrandom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-	
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int x,y;
+				String direction = null;
+				main.clientThread.gridTable.removeAllShip();
+				for (currentShipNumber = 0; currentShipNumber <= 3; currentShipNumber++) {
+					SquareLabel[] squareLabelOfThisShip = null;
+					while (squareLabelOfThisShip == null) {
+						if (Math.floor(Math.random()*10)%2==0) {
+							direction = "vertical";
+							y = (int) Math.round(Math.random() * 4);
+							x = (int) Math.round(Math.random() * 7);
+							squareLabelOfThisShip = searchForHighlightableLabel(y, x, direction);
+						} else {
+							direction = "horizontal";
+							x = (int) Math.round(Math.random() * 4);
+							y = (int) Math.round(Math.random() * 7);
+							squareLabelOfThisShip = searchForHighlightableLabel(y, x, direction);
+						}
+					}
+					Ship ship = new Ship(direction);
+					main.clientThread.gridTable.placeShip(ship,currentShipNumber, squareLabelOfThisShip);
+					Square[] sql=ship.getSquareOfThisShip();
+					for (int j=1;j<5;j++) {
+						SquareLabel squareLabel = sql[j-1].getUIOfThisSquare();
+						if (direction.equals("horizontal")) {
+							squareLabel.setIcon(Main.createImageWithSize(("boat/horizontal-" +j +".png"),64,44));
+							squareLabel.repaint();
+							squareLabel.revalidate();
+
+						} else {
+							squareLabel.setIcon(Main.createImageWithSize(("boat/vertical-" +j +".png"),64,44));
+							squareLabel.repaint();
+							squareLabel.revalidate();
+						}
+					}
+				}
+				if (main.clientThread.gridTable.allShipsReady()) {
+					buttonready.setEnabled(true);
+
+					main.repaint();
+					main.revalidate();
+				}
+				setShipPlacingEnabled(false);
 			}
+
 		});
 		west3.add(buttonrandom, BorderLayout.EAST);
 
