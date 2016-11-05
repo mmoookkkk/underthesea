@@ -1,3 +1,4 @@
+//
 package game;
 
 import java.util.Arrays;
@@ -22,16 +23,13 @@ public class GridTable {
 		}
 	}
 	
-	public boolean[] attacked(int y, int x) { 
-		boolean[] hitAndSunk = new boolean[2];
-		if(myCurrentTable[y][x].hasShip()) { 
-			hitAndSunk[0] = true;
+	public boolean attacked(int y, int x) { 
+		boolean hit = false;
 			myCurrentTable[y][x].clicked = true;
-			if(myCurrentTable[y][x].shipOnThisSquare.isShipSunk()) {
-				hitAndSunk[1] = true; 
-			}
+		if(myCurrentTable[y][x].hasShip()) { 
+			hit = true;
 		}
-		return hitAndSunk;
+		return hit;
 	}
 		
 	public void placeShip(Ship ship,int currentShipNumber,SquareLabel[] position) {
@@ -60,9 +58,7 @@ public class GridTable {
 			return true;
 		}
 		return false;
-	}
-	
-
+	}	
 	
 	public void removeAllShip() {
 		for(int i=0;i<4;i++) {
@@ -73,6 +69,7 @@ public class GridTable {
 				squareOfThisShip[j].hasShip = false;
 				squareOfThisShip[j].label.setIcon(null);
 				squareOfThisShip[j].label.revalidate();
+                squareOfThisShip[j].label.repaint();
 			}
 			}
 		}
@@ -92,3 +89,10 @@ public class GridTable {
 	
 	
 }
+
+
+	
+	
+	
+	
+

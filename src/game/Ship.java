@@ -1,3 +1,4 @@
+//
 package game;
 
 public class Ship {
@@ -29,3 +30,7 @@ public class Ship {
 	}
 	
 }
+
+
+	
+

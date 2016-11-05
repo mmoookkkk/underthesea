@@ -1,5 +1,6 @@
-package userInterface;
 
+package userInterface;
+//
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -47,7 +48,7 @@ public class PlaceYourShip extends UI {
 		shipPlacingDirection = "vertical"; // SHIPDIRECTION
 		currentShipNumber = 0;
 
-		mainPanel = paintMainPanel(main.background);
+		mainPanel = paintMainPanel(main.backgroundImage);
 		mainPanel.setLayout(new BorderLayout(0, 0));
 		mainPanel.setPreferredSize(new Dimension(1024, 768));
 
@@ -62,7 +63,7 @@ public class PlaceYourShip extends UI {
 		west1.setOpaque(false);
 		west.add(west1, BorderLayout.NORTH);
 
-		ImageIcon notready = Main.createImageIcon("text/notready.png", 300, 100);
+		ImageIcon notready = Main.createImageWithSize("text/notready.png", 300, 100);
 		JLabel buttonnotready = new JLabel("");
 		buttonnotready.setIcon(notready);
 		west1.add(buttonnotready, BorderLayout.CENTER);
@@ -105,7 +106,7 @@ public class PlaceYourShip extends UI {
 								Ship ship = new Ship(shipPlacingDirection);
 								
 								// Set ship on board game
-								main.client.gridTable.placeShip(ship, currentShipNumber, highlighting);
+								main.clientThread.gridTable.placeShip(ship, currentShipNumber, highlighting);
 								currentShipNumber=currentShipNumber+1;
 								
 
@@ -120,17 +121,18 @@ public class PlaceYourShip extends UI {
 							
 					
 									if (shipPlacingDirection.equals("right")) {
-										ImageIcon v=Main.createImageIcon("boat/horizontal-" + (i+1) + ".png",64,44);
+										ImageIcon v=Main.createImageWithSize("boat/horizontal-" + (i+1) + ".png",64,44);
 ;										squareLabel.setIcon(v);
 										
 
 									} else {
-										ImageIcon h=Main.createImageIcon("boat/vertical-" + (i+1) + ".png",64,44);
+										ImageIcon h=Main.createImageWithSize("boat/vertical-" + (i+1) + ".png",64,44);
 									   squareLabel.setIcon(h);
 										
 									}
 										
 								}
+								
 								buttonclear.setEnabled(true);
 								
 								// lblPressReady.setText("Press Ready !!");
@@ -145,7 +147,7 @@ public class PlaceYourShip extends UI {
 								mouseExited(e);
 								
 								// check if all ships are placed
-								if (main.client.gridTable.allShipsReady()) {
+								if (main.clientThread.gridTable.allShipsReady()) {
 									buttonready.setEnabled(true);
 
 									main.repaint();
@@ -200,7 +202,7 @@ public class PlaceYourShip extends UI {
 		west3.setOpaque(false);
 		west.add(west3, BorderLayout.SOUTH);
 
-		ImageIcon clear = Main.createImageIcon("button/button-delete.png", 200, 200);
+		ImageIcon clear = Main.createImageWithSize("button/button-delete.png", 200, 200);
 		JButton buttonclear = new JButton("");
 		buttonclear.setIcon(clear);
 
@@ -208,9 +210,20 @@ public class PlaceYourShip extends UI {
 		buttonclear.setOpaque(false);
 		buttonclear.setContentAreaFilled(false);
 		buttonclear.setBorderPainted(false);
+		buttonclear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main.clientThread.gridTable.removeAllShip();
+				mainPanel.repaint();
+				currentShipNumber = 0;
+				buttonclear.setEnabled(false);
+				buttonready.setEnabled(false);
+//			lblPressReady.setText("");
+			}
+		});
 		west3.add(buttonclear, BorderLayout.WEST);
+		
 
-		ImageIcon random = Main.createImageIcon("button/button-random.png", 200, 200);
+		ImageIcon random = Main.createImageWithSize("button/button-random.png", 200, 200);
 		JButton buttonrandom = new JButton("");
 		buttonrandom.setIcon(random);
 
@@ -230,7 +243,7 @@ public class PlaceYourShip extends UI {
 		east1.setOpaque(false);
 		east.add(east1, BorderLayout.NORTH);
 
-		ImageIcon chooseship = Main.createImageIcon("text/chooseship.png", 380, 50);
+		ImageIcon chooseship = Main.createImageWithSize("text/chooseship.png", 380, 50);
 		JLabel buttonchooseship = new JLabel("");
 		buttonchooseship.setIcon(chooseship);
 		east1.add(buttonchooseship, BorderLayout.CENTER);
@@ -246,7 +259,7 @@ public class PlaceYourShip extends UI {
 		east2left.setOpaque(false);
 		east2.add(east2left, BorderLayout.WEST);
 
-		ImageIcon verticalShip = Main.createImageIcon("boat/boat-vertical.png", 100, 200);
+		ImageIcon verticalShip = Main.createImageWithSize("boat/boat-vertical.png", 100, 200);
 		JButton buttonvertical = new JButton("");
 		buttonvertical.setIcon(verticalShip);
 		buttonvertical.setName("ship1");
@@ -278,7 +291,7 @@ public class PlaceYourShip extends UI {
 				// Set ship number
 				
 				// Clear ship occupation
-				Ship ship = main.client.gridTable.getShip(currentShipNumber);
+				Ship ship = main.clientThread.gridTable.getShip(currentShipNumber);
 				if (ship != null) { // If there are already ship1 set, clear the
 									// occupation
 //					main.client.gridTable.removeShip(ship);
@@ -287,7 +300,7 @@ public class PlaceYourShip extends UI {
 
 				}
 				// Enable ship placing mode
-				if(!main.client.gridTable.allShipsReady()){
+				if(!main.clientThread.gridTable.allShipsReady()){
 					setShipPlacingEnabled(true);
 				}
 			}
@@ -300,7 +313,7 @@ public class PlaceYourShip extends UI {
 		east2right.setOpaque(false);
 		east2.add(east2right, BorderLayout.EAST);
 
-		ImageIcon horizontalShip = Main.createImageIcon("boat/boat-horizontal.png", 200, 100);
+		ImageIcon horizontalShip = Main.createImageWithSize("boat/boat-horizontal.png", 200, 100);
 		JButton buttonhorizontal = new JButton("");
 		buttonhorizontal.setIcon(horizontalShip);
 		buttonhorizontal.setName("ship2");
@@ -331,7 +344,7 @@ public class PlaceYourShip extends UI {
 				JButton shipLabel = (JButton) e.getSource();
 				// Set ship number
 				// Clear ship occupation
-				Ship ship = main.client.gridTable.getShip(currentShipNumber);
+				Ship ship = main.clientThread.gridTable.getShip(currentShipNumber);
 	
 //				if (ship != null) { // If there are already ship1 set, clear the
 //									// occupation
@@ -341,7 +354,7 @@ public class PlaceYourShip extends UI {
 //
 //				}
 				// Enable ship placing mode
-				if(!main.client.gridTable.allShipsReady()){
+				if(!main.clientThread.gridTable.allShipsReady()){
 					setShipPlacingEnabled(true);
 				}
 				
@@ -354,8 +367,9 @@ public class PlaceYourShip extends UI {
 		east3.setPreferredSize(new Dimension(512, 159));
 		east3.setOpaque(false);
 		east.add(east3, BorderLayout.SOUTH);
+		//
 
-		ImageIcon ready = Main.createImageIcon("button/button-ready.png", 200, 200);
+		ImageIcon ready = Main.createImageWithSize("button/button-ready.png", 200, 200);
 		JButton buttonready = new JButton("");
 		buttonready.setIcon(ready);
 
@@ -363,7 +377,17 @@ public class PlaceYourShip extends UI {
 		buttonready.setOpaque(false);
 		buttonready.setContentAreaFilled(false);
 		buttonready.setBorderPainted(false);
+		buttonready.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Check if all ship has been set
+				System.out.println(main.clientThread.gridTable.allShipsReady());
+				if (main.clientThread.gridTable.allShipsReady()) {
+					main.clientThread.startGame();
 
+				}
+			}
+		});
 		east3.add(buttonready, BorderLayout.SOUTH);
 
 	}

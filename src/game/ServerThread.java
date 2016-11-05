@@ -1,5 +1,5 @@
 package game;
-
+//
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -153,17 +153,26 @@ public class ServerThread implements Runnable{
 							case "CLIENT_ReadyToBattle":
 								if(lock.getName().equals("readyToBattle")) {
 									if(lock.getCounter() == 0) {
-										out.println("SERVER_OpponentNotReady");
-										if(clientNum == 1){
-											client1SocketThread.out.println("SERVER_OpponentReady");
-										}
-										else{
-											client2SocketThread.out.println("SERVER_OpponentReady");
-										}
+										out.println("SERVER_OpponentNotReadyToBattle");
+//										if(clientNum == 1){
+//											client1SocketThread.out.println("SERVER_OpponentReady");
+//										}
+//										else{
+//											client2SocketThread.out.println("SERVER_OpponentReady");
+//										}
 									}
 									synchronized(lock) {
 										lock.incrementCounter();
 										lock.notify();
+										if(lock.getCounter()==2){
+										if(clientNum == 1){
+											client1SocketThread.out.println("SERVER_OpponentReadyToBattle");
+										}
+										else{
+											client2SocketThread.out.println("SERVER_OpponentReadyToBattle");
+										}
+										}
+										
 									}
 								} 
 								break;
@@ -180,16 +189,24 @@ public class ServerThread implements Runnable{
 									client1SocketThread.out.println("SERVER_YouLose");
 								}
 								break;
-								
-							default :
-							if(inputMsg.indexOf("RETURN_MARK") != -1) {
+							case "CLIENT_SHAKE":
 								if(clientNum == 1) {
 									client2SocketThread.out.println(inputMsg);
 								}
 								else {
 									client1SocketThread.out.println(inputMsg);
 								}
-							} else if(inputMsg.indexOf("MARK") != -1) { 
+										
+							break;
+							default :
+							if(inputMsg.indexOf("RESULT") != -1) {
+								if(clientNum == 1) {
+									client2SocketThread.out.println(inputMsg);
+								}
+								else {
+									client1SocketThread.out.println(inputMsg);
+								}
+							} else if(inputMsg.indexOf("ATTACK") != -1) { 
 								if(clientNum == 1) {
 									client2SocketThread.out.println(inputMsg);
 								}

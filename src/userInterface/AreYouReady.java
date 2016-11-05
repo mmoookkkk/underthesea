@@ -1,4 +1,4 @@
-
+//
 
 package userInterface;
 
@@ -40,7 +40,7 @@ dialog = new JDialog(main, "");
 
 dialog.setPreferredSize(new Dimension(500,500));
 
-dialog.setLocation(Main.getPopUpLocation(this));
+dialog.setLocation(Main.middleOfWindow(this));
 
 dialog.getContentPane().setLayout(new FlowLayout());
 JLabel label = new JLabel("Are you ready?");
@@ -69,7 +69,7 @@ ready.addMouseListener(new MouseAdapter() {
 @Override
 public void mouseClicked(MouseEvent e) {
 
-   main.client.startPlaceShip();
+   main.clientThread.startPlaceShip();
      ready.setText("Please wait");
      ready.setEnabled(false);
 

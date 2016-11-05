@@ -1,5 +1,5 @@
 package userInterface;
-
+//
 import javax.swing.JLabel;
 
 import game.Main;
@@ -32,12 +32,12 @@ public class SquareLabel extends JLabel{
 	}
 	
 	public void setAttackingTableUI() {
-		square = main.client.gridTable.attackingTable[y][x];
+		square = main.clientThread.gridTable.attackingTable[y][x];
 		square.setUIOfThisSquare(this);
 	}
 	
 	public void setMyCurrentTableUI() {
-		square = main.client.gridTable.myCurrentTable[y][x];
+		square = main.clientThread.gridTable.myCurrentTable[y][x];
 		square.setUIOfThisSquare(this);
 	}
 	

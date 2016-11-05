@@ -1,5 +1,5 @@
 package userInterface;
-
+//
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,7 +48,7 @@ public class LandingPage extends UI {
 
 	protected void initialize() {
 		
-		mainPanel = paintMainPanel(main.background);
+		mainPanel = paintMainPanel(main.backgroundImage);
 		
 		// game logo panel
 		JPanel north = new JPanel();
@@ -57,7 +57,7 @@ public class LandingPage extends UI {
 		mainPanel.add(north, BorderLayout.NORTH);
 		
 
-		ImageIcon logo = Main.createImageIcon("text/logo.png", 500, 100);
+		ImageIcon logo = Main.createImageWithSize("text/logo.png", 500, 100);
 		JLabel buttonlogo = new JLabel("");
 		buttonlogo.setIcon(logo);
 		north.add(buttonlogo, BorderLayout.CENTER);
@@ -88,7 +88,7 @@ public class LandingPage extends UI {
 		west1u.setPreferredSize(new Dimension(800, 50));
 		
 		
-		ImageIcon choosecharacter = Main.createImageIcon("text/choosecharacter.png", 400, 40);
+		ImageIcon choosecharacter = Main.createImageWithSize("text/choosecharacter.png", 400, 40);
 		JLabel buttonchar = new JLabel("");
 		buttonchar.setIcon(choosecharacter);
 		west1u.add(buttonchar, BorderLayout.CENTER);
@@ -100,7 +100,7 @@ public class LandingPage extends UI {
 		west1d.setPreferredSize(new Dimension(600, 100));
 		west1d.setLayout(new BoxLayout(west1d, BoxLayout.X_AXIS));
 		
-		ImageIcon player1 = Main.createImageIcon("character/player1b.png", 100, 100);
+		ImageIcon player1 = Main.createImageWithSize("character/player1b.png", 100, 100);
 		JButton buttonp1 = new JButton("");
 		buttonp1.setIcon(player1);
 
@@ -111,7 +111,7 @@ public class LandingPage extends UI {
 		buttonp1.setBorderPainted(false);
 		west1d.add(buttonp1);
 
-		ImageIcon player2 = Main.createImageIcon("character/player2b.png", 100, 100);
+		ImageIcon player2 = Main.createImageWithSize("character/player2b.png", 100, 100);
 		JButton buttonp2 = new JButton("");
 		buttonp2.setIcon(player2);
 //		buttonp2.setOpaque(false);
@@ -122,7 +122,7 @@ public class LandingPage extends UI {
 		buttonp2.setBorderPainted(false);
 		west1d.add(buttonp2);
 
-		ImageIcon player3 = Main.createImageIcon("character/player3b.png", 100, 100);
+		ImageIcon player3 = Main.createImageWithSize("character/player3b.png", 100, 100);
 		JButton buttonp3 = new JButton("");
 		buttonp3.setIcon(player3);
 
@@ -133,7 +133,7 @@ public class LandingPage extends UI {
 		buttonp3.setBorderPainted(false);
 		west1d.add(buttonp3);
 
-		ImageIcon player4 = Main.createImageIcon("character/player4b.png", 100, 100);
+		ImageIcon player4 = Main.createImageWithSize("character/player4b.png", 100, 100);
 		JButton buttonp4 = new JButton("");
 		buttonp4.setIcon(player4);
 
@@ -144,7 +144,7 @@ public class LandingPage extends UI {
 		buttonp4.setBorderPainted(false);
 		west1d.add(buttonp4);
 
-		ImageIcon player5 = Main.createImageIcon("character/player1b.png", 100, 100);
+		ImageIcon player5 = Main.createImageWithSize("character/player1b.png", 100, 100);
 		JButton buttonp5 = new JButton("");
 		buttonp5.setIcon(player5);
 
@@ -153,13 +153,13 @@ public class LandingPage extends UI {
 
 		west1d.add(buttonp5);
 		profilephoto=player1;
-		main.picImage="character/player1b.png";
+		main.profilePic="character/player1b.png";
 		
 		buttonp1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player1);
-				main.picImage="character/player1b.png";
+				main.profilePic="character/player1b.png";
 				profilephoto=player1;
 				main.player.setProfilePhoto(profilephoto);
 			}
@@ -168,7 +168,7 @@ public class LandingPage extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player2);
-				main.picImage="character/player2b.png";
+				main.profilePic="character/player2b.png";
 				profilephoto=player2;
 				main.player.setProfilePhoto(profilephoto);
 			}
@@ -177,7 +177,7 @@ public class LandingPage extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player3);
-				main.picImage="character/player3b.png";
+				main.profilePic="character/player3b.png";
 				profilephoto=player3;
 				main.player.setProfilePhoto(profilephoto);
 			}
@@ -187,7 +187,7 @@ public class LandingPage extends UI {
 			public void actionPerformed(ActionEvent e) {
 				buttonp5.setIcon(player4);
 				profilephoto=player4;
-				main.picImage="character/player4b.png";
+				main.profilePic="character/player4b.png";
 				main.player.setProfilePhoto(profilephoto);
 			}
 		});
@@ -205,7 +205,7 @@ public class LandingPage extends UI {
 		west2.add(west2u, BorderLayout.NORTH);
 		west2.add(Box.createVerticalStrut(-50));
 		west2u.setOpaque(false);
-		ImageIcon name = Main.createImageIcon("text/name.png", 120, 50);
+		ImageIcon name = Main.createImageWithSize("text/name.png", 120, 50);
 		JLabel buttonname = new JLabel("");
 		buttonname.setIcon(name);
 		west2u.add(buttonname, BorderLayout.CENTER);
@@ -231,7 +231,7 @@ public class LandingPage extends UI {
 		west3.add(west3u, BorderLayout.NORTH);
 		west3.add(Box.createVerticalStrut(-100));
 		west3u.setOpaque(false);
-		ImageIcon chooseBg = Main.createImageIcon("choosetheme.png", 350, 50);
+		ImageIcon chooseBg = Main.createImageWithSize("choosetheme.png", 350, 50);
 		JLabel buttonBg = new JLabel("");
 		buttonBg.setIcon(chooseBg);
 		west3u.add(buttonBg, BorderLayout.CENTER);
@@ -241,20 +241,20 @@ public class LandingPage extends UI {
 		west3d.setOpaque(false);
 		west3d.setLayout(new BoxLayout(west3d, BoxLayout.X_AXIS));
 		
-		ImageIcon bg1 = Main.createImageIcon("bg/background1.png", 100, 70);
+		ImageIcon bg1 = Main.createImageWithSize("bg/background1.png", 100, 70);
 		JButton buttonBg1 = new JButton("");
 		buttonBg1.setIcon(bg1);
 		buttonBg1.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 			    
 			    
-			     main.background = Main.createImageIcon("bg/background1.png", 1024, 768).getImage();
-			     //Push this state and change MAIN_MENU_STATE to refresh the background
+			     main.backgroundImage = Main.createImageWithSize("bg/background1.png", 1024, 768).getImage();
+			     //Push this state and change MAIN_MENU_STATE to refresh the backgroundImage
 			     main.stack.popPage();
 			     main.stack.pushPage(new LandingPage(main));
 			     if(!(main.song1chosen)){
 			    	 main.song2.close();
-			    	 main.createSound();
+			    	 main.initializeSound();
 			    	 main.song1.start();
 			    	 main.song1.loop(Clip.LOOP_CONTINUOUSLY);
 			    	 main.song1chosen=true;
@@ -276,21 +276,21 @@ public class LandingPage extends UI {
 		
 
 
-		ImageIcon bg2 = Main.createImageIcon("bg/background2.png", 100, 70);
+		ImageIcon bg2 = Main.createImageWithSize("bg/background2.png", 100, 70);
 		JButton buttonBg2 = new JButton("");
 		buttonBg2.setIcon(bg2);
 		buttonBg2.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 			    
 			    
-			     main.background = Main.createImageIcon("bg/background2.png", 1024, 768).getImage();
-			     //Push this state and change MAIN_MENU_STATE to refresh the background
+			     main.backgroundImage = Main.createImageWithSize("bg/background2.png", 1024, 768).getImage();
+			     //Push this state and change MAIN_MENU_STATE to refresh the backgroundImage
 			    
                  main.stack.popPage();
 			     main.stack.pushPage(new LandingPage(main));
 			     if(main.song1chosen){
 			    	 main.song1.close();
-			    	 main.createSound();
+			    	 main.initializeSound();
 			    	 main.song2.start();
 			    	 main.song2.loop(Clip.LOOP_CONTINUOUSLY);
 			    	 main.song1chosen=false;
@@ -318,7 +318,7 @@ public class LandingPage extends UI {
 		east.setOpaque(false);
 		south.add(east);
 		
-		ImageIcon connect = Main.createImageIcon("button/button-connect2server.png", 300, 200);
+		ImageIcon connect = Main.createImageWithSize("button/button-connect2server.png", 300, 200);
 		JButton buttonConnect = new JButton("");
 		buttonConnect.setIcon(connect);
 
@@ -329,7 +329,7 @@ public class LandingPage extends UI {
 				if(!nameField.getText().isEmpty()){
 				main.player.setName(nameField.getText());
 				}
-				main.connect();
+				main.connect2Server();
 			}
 		});
 		buttonConnect.setPreferredSize(new Dimension(300, 200));
@@ -353,7 +353,7 @@ public class LandingPage extends UI {
 	public void leave() {
 		// Buffer the MAIN_MENU_STATE
 		System.out.println(Thread.currentThread().getName() + ": leaving " + page);
-		main.getContentPane().remove(main.currentStatePanel);
+		main.getContentPane().remove(main.currentPage);
 		// main.stack.storeBufferedState(StackFunction.MAIN_MENU_STATE, this);
 
 	}

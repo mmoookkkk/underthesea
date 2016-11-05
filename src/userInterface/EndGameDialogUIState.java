@@ -1,5 +1,5 @@
 package userInterface;
-
+//
 import game.Main;
 
 
@@ -29,7 +29,7 @@ public class EndGameDialogUIState extends UI {
 		page = StackPage.END;
 		dialog = new JDialog(main);
 		dialog.setPreferredSize(new Dimension(400, 300));
-		dialog.setLocation(Main.getPopUpLocation(this));
+		dialog.setLocation(Main.middleOfWindow(this));
 		dialog.getContentPane().setBackground(Color.BLACK);
 		initialize(text);
 		
@@ -65,7 +65,7 @@ public class EndGameDialogUIState extends UI {
 		button.setLayout(new BorderLayout());
 		panel.add(button,BorderLayout.CENTER);
 		
-		JButton cont = new JButton(Main.createImageIcon("btn-cont.png",150,50));
+		JButton cont = new JButton(Main.createImageWithSize("btn-cont.png",150,50));
 		cont.setBorderPainted(false);
 		cont.addActionListener(new ActionListener() {
 			@Override
@@ -77,7 +77,7 @@ public class EndGameDialogUIState extends UI {
 		});
 		
 		
-		JButton exit =new JButton(Main.createImageIcon("btn-jexit.png",150,50));
+		JButton exit =new JButton(Main.createImageWithSize("btn-jexit.png",150,50));
 		exit.setBorderPainted(false);
 		exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){

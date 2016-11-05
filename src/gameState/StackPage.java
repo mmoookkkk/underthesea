@@ -1,5 +1,5 @@
 package gameState;
-
+//
 public interface StackPage {
 	
 	public static String LANDINGPAGE = "LANDINGPAGE";

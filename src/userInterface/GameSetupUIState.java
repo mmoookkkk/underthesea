@@ -76,7 +76,7 @@
 //
 //	public void initialize() {
 //
-//		panel = paintMainPanel(main.background);
+//		panel = paintMainPanel(main.backgroundImage);
 //		panel.setLayout(new BorderLayout(0, 0));
 //		panel.setPreferredSize(new Dimension(1024, 768));
 //
@@ -253,7 +253,7 @@
 //								// Create a ship on those squares
 //								Ship ship = new Ship(shipNumber, shipPlacingDirection);
 //								// Set ship on board game
-//								main.client.gridTable.placeShip(ship, shipNumber, highlighting);
+//								main.clientThread.gridTable.placeShip(ship, shipNumber, highlighting);
 //
 ////								if (success) { // Success -> set ship
 //												// graphically
@@ -288,7 +288,7 @@
 //
 //									// Re-invoke mouse exited on e
 //									mouseExited(e);
-//									if (main.client.gridTable.allShipsReady()) {
+//									if (main.clientThread.gridTable.allShipsReady()) {
 //										// main.client.startGame();
 //										readyButton.setEnabled(true);
 //										lblPressReady.setText("Press Ready !!");
@@ -406,13 +406,13 @@
 //		statusP2.setLayout(new BorderLayout());
 //		statusP2.setPreferredSize(new Dimension(105,40));
 //		
-//		b1 = new JLabel(main.createImageIcon("notready.png",10,10));
+//		b1 = new JLabel(Main.createImageWithSize("notready.png",10,10));
 //		//b1.setHorizontalAlignment(SwingConstants.RIGHT);
 //		JLabel p1 = new JLabel(main.player.getName());
 //		p1.setHorizontalAlignment(SwingConstants.CENTER);
 //		//p1.setVerticalAlignment(SwingConstants.CENTER);
 //		p1.setFont(new Font("Avenir", Font.PLAIN, 12));
-//		b2 = new JLabel(main.createImageIcon("notready.png",10,10));
+//		b2 = new JLabel(Main.createImageWithSize("notready.png",10,10));
 //		p2 = new JLabel("");
 //		p2.setHorizontalAlignment(SwingConstants.CENTER);
 //		p2.setFont(new Font("Avenir", Font.PLAIN, 12));
@@ -483,7 +483,7 @@
 //		cancelButton.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {
 //				// Check if all ship has been set
-//				main.client.gridTable.removeAllShip();
+//				main.clientThread.gridTable.removeAllShip();
 //				cancelButton.setEnabled(false);
 //				lblPressReady.setText("");
 //			}
@@ -499,9 +499,9 @@
 //			@Override
 //			public void actionPerformed(ActionEvent e) {
 //				// Check if all ship has been set
-//				System.out.println(main.client.gridTable.allShipsReady());
-//				if (main.client.gridTable.allShipsReady()) {
-//					main.client.startGame();
+//				System.out.println(main.clientThread.gridTable.allShipsReady());
+//				if (main.clientThread.gridTable.allShipsReady()) {
+//					main.clientThread.startGame();
 //
 //				}
 //			}
@@ -525,7 +525,7 @@
 //				int x;
 //				String direction = null;
 //				// Clear all ship
-//				main.client.gridTable.removeAllShip();
+//				main.clientThread.gridTable.removeAllShip();
 //				for (int i = 0; i <= 3; i++) {
 //					SquareLabel[] position = null;
 //					while (position == null) {
@@ -543,7 +543,7 @@
 //					}
 //					Ship ship = new Ship(i, direction);
 //					// Set ship on board game
-//					main.client.gridTable.placeShip(ship, i, position);
+//					main.clientThread.gridTable.placeShip(ship, i, position);
 //					int j = 1;
 //					for (Square square : ship.getSquareOfThisShip()) {
 //						SquareLabel squareLabel = square.getUIOfThisSquare();
@@ -588,10 +588,10 @@
 //				// Set ship number
 //				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 //				// Clear ship occupation
-//				Ship ship = main.client.gridTable.getShip(shipNumber);
+//				Ship ship = main.clientThread.gridTable.getShip(shipNumber);
 //				if (ship != null) { // If there are already ship1 set, clear the
 //									// occupation
-//					main.client.gridTable.removeShip(ship);
+//					main.clientThread.gridTable.removeShip(ship);
 //					readyButton.setEnabled(false);
 //					lblPressReady.setText("");
 //
@@ -610,10 +610,10 @@
 //				// Set ship number
 //				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 //				// Clear ship occupation
-//				Ship ship = main.client.gridTable.getShip(shipNumber);
+//				Ship ship = main.clientThread.gridTable.getShip(shipNumber);
 //				if (ship != null) { // If there are already ship2 set, clear the
 //									// occupation
-//					main.client.gridTable.removeShip(ship);
+//					main.clientThread.gridTable.removeShip(ship);
 //					readyButton.setEnabled(false);
 //					lblPressReady.setText("");
 //				}
@@ -631,10 +631,10 @@
 //				// Set ship number
 //				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 //				// Clear ship occupancy
-//				Ship ship = main.client.gridTable.getShip(shipNumber);
+//				Ship ship = main.clientThread.gridTable.getShip(shipNumber);
 //				if (ship != null) { // If there are already ship3 set, clear the
 //									// occupation
-//					main.client.gridTable.removeShip(ship);
+//					main.clientThread.gridTable.removeShip(ship);
 //					readyButton.setEnabled(false);
 //					lblPressReady.setText("");
 //				}
@@ -652,10 +652,10 @@
 //				// Set ship number
 //				shipNumber = Integer.parseInt(shipLabel.getName().substring(shipLabel.getName().length() - 1)) - 1;
 //				// Clear ship occupation
-//				Ship ship = main.client.gridTable.getShip(shipNumber);
+//				Ship ship = main.clientThread.gridTable.getShip(shipNumber);
 //				if (ship != null) { // If there are already ship4 set, clear the
 //									// occupation
-//					main.client.gridTable.removeShip(ship);
+//					main.clientThread.gridTable.removeShip(ship);
 //					readyButton.setEnabled(false);
 //					lblPressReady.setText("");
 //				}

@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 
 import game.Main;
 import gameState.StackPage;
-
+//
 public class WaitForOpponentReadyUIState extends UI {
  
  public WaitForOpponentReadyUIState(Main main) throws MalformedURLException {
@@ -36,7 +36,7 @@ public class WaitForOpponentReadyUIState extends UI {
 
     dialog.setPreferredSize(new Dimension(350,270));
 
-    dialog.setLocation(Main.getPopUpLocation(this));
+    dialog.setLocation(Main.middleOfWindow(this));
 
     dialog.getContentPane().setLayout(new FlowLayout());
 

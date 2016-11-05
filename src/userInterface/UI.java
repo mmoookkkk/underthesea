@@ -1,5 +1,5 @@
 package userInterface;
-
+//
 import java.awt.Graphics;
 
 import java.awt.Graphics2D;
@@ -43,7 +43,7 @@ public abstract class UI implements StackPage{
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				((Graphics2D)g.create()).drawImage(Main.createImageIcon(fileName,width,height).getImage(), 0, 0, width, height, this);
+				((Graphics2D)g.create()).drawImage(Main.createImageWithSize(fileName,width,height).getImage(), 0, 0, width, height, this);
 			}
 			
 		};

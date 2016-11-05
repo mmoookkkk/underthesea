@@ -34,7 +34,7 @@ import javax.swing.border.LineBorder;
 
 
 import game.Main;
-import game.Main.GameClient;
+import game.Main.ClientThread;
 import gameState.StackPage;
 import gameState.StackFunction;
 import game.Ship;
@@ -71,7 +71,7 @@ public class GameUIState extends UI {
 		super(main);
 		page = StackPage.BATTLE;
 
-		panel = paintMainPanel(main.background);
+		panel = paintMainPanel(main.backgroundImage);
 		panel.setLayout(new BorderLayout(0, 0));
 		panel.setPreferredSize(new Dimension(1024, 768)); // 768-568-100
 
@@ -133,7 +133,7 @@ public class GameUIState extends UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String toBeSend=sendMSG.getText();
-				main.client.sendMessage(toBeSend);
+				main.clientThread.sendMessage(toBeSend);
 				sendMSG.setText("");
 			}
 		});
@@ -221,32 +221,32 @@ public class GameUIState extends UI {
 							System.out.println("Occupied: " + boardLabel[y][x].getSquare().hasShip());
 							if (boardLabel[y][x].getSquare().isClicked())
 								return;
-							main.client.mark(y, x);
+							main.clientThread.attack(y, x);
 
 							
+//							//
+//							// sirawich
+//							point_opponent = 0;
+//							for (int i = 0; i < 7; i++) {
+//								for (int j = 0; j < 7; j++) {
+//									// if(clientThread.boardGame.board[i][j].isMarked()){
+//									if (main.clientThread.gridTable.myCurrentTable[i][j].isClicked()) {
+//										point_opponent += 1;
+//										
+//									
+//
+//									}
+//								}
+//							}
+//							// P2Score
+//							P2Score.setText("" + point_opponent);
+
 							//
-							// sirawich
-							point_opponent = 0;
-							for (int i = 0; i < 7; i++) {
-								for (int j = 0; j < 7; j++) {
-									// if(client.boardGame.board[i][j].isMarked()){
-									if (main.client.gridTable.myCurrentTable[i][j].isClicked()) {
-										point_opponent += 1;
-										
-									
 
-									}
-								}
-							}
-							// P2Score
-							P2Score.setText("" + point_opponent);
-
-							//
-
-							main.client.timer_turn_duration.stop();
+							main.clientThread.countDownTime.stop();
 							lblTimer.setText("END");
 
-							// Game client will update the gui
+							// Game clientThread will update the gui
 						} else
 							return; // do nothing
 					}
@@ -432,7 +432,7 @@ public class GameUIState extends UI {
 		server.setLayout(new BorderLayout(0, 0));
 		serverPanel.add(server, BorderLayout.SOUTH);
 
-		JLabel lblServer = new JLabel(main.client.opponentName);
+		JLabel lblServer = new JLabel(main.clientThread.opponentName);
 		lblServer.setVerticalAlignment(SwingConstants.TOP);
 		lblServer.setFont(new Font("Avenir", Font.PLAIN, 12));
 		lblServer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -456,8 +456,8 @@ public class GameUIState extends UI {
 		server.add(profileServer, BorderLayout.EAST);
 		
 		P2 = new JLabel();
-		P2.setIcon(Main.createImageIcon(main.client.opponentPic, 60, 60));
-		System.out.print("test name" + main.client.opponentPic);
+		P2.setIcon(Main.createImageWithSize(main.clientThread.opponentProfilePic, 60, 60));
+		System.out.print("test name" + main.clientThread.opponentProfilePic);
 	
 		profileServer.add(P2);
 		JPanel vsPanel = new JPanel();
@@ -471,9 +471,9 @@ public class GameUIState extends UI {
 		lblVs.setFont(new Font("Avenir", Font.PLAIN, 13));
 		vsPanel.add(lblVs);
 
-		// Image background =
+		// Image backgroundImage =
 		// Toolkit.getDefaultToolkit().createImage("Background.png");
-		// profileClient.drawImage(background, 0, 0, null);
+		// profileClient.drawImage(backgroundImage, 0, 0, null);
 
 		JPanel gap3 = new JPanel();
 		gap3.setOpaque(false);
@@ -502,7 +502,7 @@ public class GameUIState extends UI {
 
 		// Set ships in myBoardLabel
 		//aow ork pap deaw aow klub ma mhai cus error
-//		for (Ship ship : main.client.gridTable.getAllShips()) {
+//		for (Ship ship : main.clientThread.gridTable.getAllShips()) {
 //			int i = 1;
 //			for (Square square : ship.getSquareOfThisShip()) {
 //				if (ship.direction.equals("horizontal")) {
@@ -529,7 +529,7 @@ public class GameUIState extends UI {
 	}
 
 	public boolean isMarkingEnabled() {
-		return main.client.isMyTurn();
+		return main.clientThread.isMyTurn();
 	}
 
 	public static ImageIcon createImageIcon(String path, int width, int height) {
