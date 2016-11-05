@@ -32,8 +32,8 @@ public class MainGame extends UI {
 	public JLabel receivedMSG;
 	public JLabel showTimer;
 	public Timer timer;
-	public SquareLabel[][] opponentTable;
-	public SquareLabel[][] myTable;
+//	public SquareLabel[][] opponentTable;
+//	public SquareLabel[][] myTable;
 	public JLabel lblTimer;
 	public JLabel player1score;
 	public JLabel player2score;
@@ -80,13 +80,13 @@ public class MainGame extends UI {
 		west2.setOpaque(false);
 		west.add(west2);
 
-		ImageIcon opponentpic = Main.createImageWithSize("character/player1b.png", 70, 70);
+		ImageIcon opponentpic = Main.createImageWithSize(main.clientThread.opponentProfilePic, 70, 70);
 		JButton buttonopponent = new JButton("");
 		buttonopponent.setIcon(opponentpic);
 		buttonopponent.setPreferredSize(new Dimension(70, 70));
 		west2.add(buttonopponent);
 		
-		JLabel player1 = new JLabel("opponent"+"'s score:");
+		JLabel player1 = new JLabel(main.clientThread.opponentName+"'s score:");
 		player1.setFont(new Font("Courier New", Font.BOLD, 24));
 		player1.setForeground(Color.WHITE);
 		west2.add(player1);
@@ -105,7 +105,7 @@ public class MainGame extends UI {
 		GridLayout tableLayout = new GridLayout(8, 8);
 		west3.setLayout(tableLayout);
 
-		opponentTable = new SquareLabel[8][8];
+//		opponentTable = new SquareLabel[8][8];
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
 				SquareLabel squareLabel = new SquareLabel(this.main);
@@ -121,7 +121,8 @@ public class MainGame extends UI {
 							SquareLabel squareLabel = (SquareLabel) e.getSource();
 							int y = squareLabel.y;
 							int x = squareLabel.x;
-							if (opponentTable[y][x].getSquare().isClicked()){
+							if (main.clientThread.gridTable.attackingTable[y][x].isClicked()){
+								System.out.println("repeat"+x+" "+y);
 								return;
 							}
 							main.clientThread.attack(y, x);
@@ -133,7 +134,8 @@ public class MainGame extends UI {
 							return; 
 					}
 				});
-				opponentTable[y][x] = squareLabel;
+//				opponentTable[y][x] = squareLabel;
+				main.clientThread.gridTable.attackingTable[y][x].setUIOfThisSquare(squareLabel);
 				west3.add(squareLabel);
 			}
 		}
@@ -171,13 +173,13 @@ public class MainGame extends UI {
 		
 		
 
-		ImageIcon mypic = Main.createImageWithSize("character/player2b.png", 70, 70);
+		ImageIcon mypic = Main.createImageWithSize(main.profilePic, 70, 70);
 		JButton buttonmypic = new JButton("");
 		buttonmypic.setIcon(mypic);
 		buttonmypic.setPreferredSize(new Dimension(70, 70));
 		east2.add(buttonmypic);
 		
-		JLabel player2 = new JLabel("my"+"'s score:");
+		JLabel player2 = new JLabel(main.player.getName()+"'s score:");
 		player2.setFont(new Font("Courier New", Font.BOLD, 24));
 		player2.setForeground(Color.WHITE);
 		east2.add(player2);
@@ -195,7 +197,7 @@ public class MainGame extends UI {
 		GridLayout tableLayout2 = new GridLayout(8, 8);
 		east3.setLayout(tableLayout2);
 
-		myTable = new SquareLabel[8][8];
+//		myTable = new SquareLabel[8][8];
 		SquareLabel mysquareLabel;
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
@@ -205,7 +207,7 @@ public class MainGame extends UI {
 				mysquareLabel.setMyCurrentTableUI();
 				mysquareLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				mysquareLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-				myTable[y][x] = mysquareLabel;
+				main.clientThread.gridTable.myCurrentTable[y][x].setUIOfThisSquare(mysquareLabel);
 				east3.add(mysquareLabel);
 			}
 		}
@@ -218,10 +220,10 @@ public class MainGame extends UI {
 				Square square = squares[j];
 				if (ship.direction.equals("horizontal")) {
 					ImageIcon h = Main.createImageWithSize("boat/horizontal-" + (j + 1) + ".png",50, 50);
-					myTable[square.getY()][square.getX()].setIcon(h);
+					main.clientThread.gridTable.myCurrentTable[square.getY()][square.getX()].getUIOfThisSquare().setIcon(h);
 				} else {
 					ImageIcon v = Main.createImageWithSize("boat/vertical-" + (j + 1) + ".png", 50, 50);
-					myTable[square.getY()][square.getX()].setIcon(v);
+					main.clientThread.gridTable.myCurrentTable[square.getY()][square.getX()].getUIOfThisSquare().setIcon(v);
 				}
 			}
 		}

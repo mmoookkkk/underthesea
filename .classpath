@@ -3,5 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="/Users/Vicky/Downloads/facebook4j-core-2.4.8.jar"/>
+	<classpathentry kind="lib" path="/Users/phanthilasaengthong/Downloads/facebook4j-core-2.4.8.jar"/>
+	<classpathentry kind="lib" path="/Users/phanthilasaengthong/Documents/workspace/battleship/webcam-capture-0/webcam-capture-0.3.10.jar"/>
+	<classpathentry kind="lib" path="/Users/phanthilasaengthong/Documents/workspace/battleship/webcam-capture-0/libs/bridj-0.6.2.jar"/>
+	<classpathentry kind="lib" path="/Users/phanthilasaengthong/Documents/workspace/battleship/webcam-capture-0/libs/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/Users/phanthilasaengthong/Desktop/eclipse/plugins/org.eclipse.m2e.maven.runtime.slf4j.simple_1.7.0.20160603-1931/jars/slf4j-simple-1.7.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

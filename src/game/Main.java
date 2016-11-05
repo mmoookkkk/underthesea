@@ -29,8 +29,9 @@ import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 import userInterface.AreYouReady;
-import userInterface.EndGameDialogUIState;
-import userInterface.GameUIState;
+import userInterface.WinnerEnd;
+import userInterface.LoserEnd;
+
 import userInterface.MainGame;
 import userInterface.LandingPage;
 import userInterface.PlaceYourShip;
@@ -459,7 +460,8 @@ public class Main extends JFrame{
 						}else if(inputList.get(i).equals("SERVER_YouLose")){
 						
 							countDownTime.stop();
-							stack.pushPage(new EndGameDialogUIState(Main.this, "You lose."));
+							dispose();
+							LoserEnd ls=new LoserEnd();
 							if(song1chosen){
 								song1.close();
 							}else{
@@ -480,7 +482,7 @@ public class Main extends JFrame{
 							int xLabel = Integer.parseInt(attackedLabel.substring(2));
 							boolean hitShip = gridTable.attacked(yLabel, xLabel);
 							out.println("RESULT_" + yLabel + "," + xLabel + "_" + hitShip);
-							SquareLabel hitSquareLabel = battlePage.myTable[yLabel][xLabel];
+							SquareLabel hitSquareLabel = gridTable.myCurrentTable[yLabel][xLabel].getUIOfThisSquare();
 							
 							if (hitShip) { 
 								opponentCurrentScore=opponentCurrentScore+1;
@@ -505,7 +507,7 @@ public class Main extends JFrame{
 							returnSquare.clicked = true;
 							boolean hit = Boolean.parseBoolean(inputList.get(i).substring(inputList.get(i).lastIndexOf("_")+1, inputList.get(i).length()));
 							if (hit) {
-								battlePage.opponentTable[yLabel][xLabel].setIcon(createImageWithSize("bomb.png", 50, 50));
+								gridTable.attackingTable[yLabel][xLabel].getUIOfThisSquare().setIcon(createImageWithSize("bomb.png", 50, 50));
 								battlePage.player2score.setText(++myCurrentScore + "");
 								try {
 									insertHitEffect();
@@ -514,7 +516,7 @@ public class Main extends JFrame{
 									e.printStackTrace();
 								}
 							} else { 
-								battlePage.opponentTable[yLabel][xLabel].setIcon(createImageWithSize("missing.png", 50, 50));
+								gridTable.attackingTable[yLabel][xLabel].getUIOfThisSquare().setIcon(createImageWithSize("missing.png", 50, 50));
 								try {
 									insertMissEffect();
 								} catch (LineUnavailableException e) {
@@ -526,7 +528,7 @@ public class Main extends JFrame{
 							
 							if (myCurrentScore == 16) {
 								out.println("CLIENT_IWin");
-								stack.pushPage(new EndGameDialogUIState(Main.this, "Congratulations, You win!"));
+								stack.pushPage(new WinnerEnd(Main.this));
 								countDownTime.stop();		
 								if(song1chosen){
 									song1.close();
