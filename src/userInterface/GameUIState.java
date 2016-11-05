@@ -500,8 +500,8 @@ public class GameUIState extends UI {
 			}
 		}
 
-		// Set ships in myBoardLabel
-		//aow ork pap deaw aow klub ma mhai cus error
+//		 Set ships in myBoardLabel
+//		aow ork pap deaw aow klub ma mhai cus error
 //		for (Ship ship : main.clientThread.gridTable.getAllShips()) {
 //			int i = 1;
 //			for (Square square : ship.getSquareOfThisShip()) {

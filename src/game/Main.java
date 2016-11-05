@@ -332,7 +332,7 @@ public class Main extends JFrame{
 							}
 						}
 					
-						battlePage.P2Score.setText(opponentCurrentScore+"");
+						battlePage.player1score.setText(opponentCurrentScore+"");
                     return;
 					} else {
 						battlePage.lblTimer.setText(timeLeft + "");
@@ -480,16 +480,16 @@ public class Main extends JFrame{
 							int xLabel = Integer.parseInt(attackedLabel.substring(2));
 							boolean hitShip = gridTable.attacked(yLabel, xLabel);
 							out.println("RESULT_" + yLabel + "," + xLabel + "_" + hitShip);
-							SquareLabel hitSquareLabel = gridTable.myCurrentTable[yLabel][xLabel].getUIOfThisSquare();
+							SquareLabel hitSquareLabel = battlePage.myTable[yLabel][xLabel];
 							
 							if (hitShip) { 
 								opponentCurrentScore=opponentCurrentScore+1;
-								battlePage.P2Score.setText(opponentCurrentScore + "");
-								hitSquareLabel.setIcon(createImageWithSize("effect/hit.png", 37, 37));
+								battlePage.player1score.setText(opponentCurrentScore + "");
+								hitSquareLabel.setIcon(createImageWithSize("bomb.png", 50, 50));
 								repaint();
 								revalidate();
 							} else { 
-								hitSquareLabel.setIcon(createImageWithSize("effect/miss.png", 37, 37));
+								hitSquareLabel.setIcon(createImageWithSize("missing.png", 50, 50));
 								repaint();
 								revalidate();
 							}
@@ -501,12 +501,12 @@ public class Main extends JFrame{
 							int yLabel = Integer.parseInt(attackedLabel.substring(0,1));
 							int xLabel = Integer.parseInt(attackedLabel.substring(2));
 							Square returnSquare = gridTable.attackingTable[yLabel][xLabel];
-							SquareLabel returnSquareLabel = returnSquare.getUIOfThisSquare();
+//							SquareLabel returnSquareLabel = returnSquare.getUIOfThisSquare();
 							returnSquare.clicked = true;
 							boolean hit = Boolean.parseBoolean(inputList.get(i).substring(inputList.get(i).lastIndexOf("_")+1, inputList.get(i).length()));
 							if (hit) {
-								returnSquareLabel.setIcon(createImageWithSize("effect/hit.png", 37, 37));
-								battlePage.P1Score.setText(++myCurrentScore + "");
+								battlePage.opponentTable[yLabel][xLabel].setIcon(createImageWithSize("bomb.png", 50, 50));
+								battlePage.player2score.setText(++myCurrentScore + "");
 								try {
 									insertHitEffect();
 								} catch (LineUnavailableException e) {
@@ -514,7 +514,7 @@ public class Main extends JFrame{
 									e.printStackTrace();
 								}
 							} else { 
-								returnSquareLabel.setIcon(createImageWithSize("effect/miss.png", 37, 37));
+								battlePage.opponentTable[yLabel][xLabel].setIcon(createImageWithSize("missing.png", 50, 50));
 								try {
 									insertMissEffect();
 								} catch (LineUnavailableException e) {

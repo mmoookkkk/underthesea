@@ -121,7 +121,7 @@ public class PlaceYourShip extends UI {
 									SquareLabel squareLabel = square[i].getUIOfThisSquare();
 							
 					
-									if (shipPlacingDirection.equals("right")) {
+									if (shipPlacingDirection.equals("horizontal")) {
 										ImageIcon v=Main.createImageWithSize("boat/horizontal-" + (i+1) + ".png",64,44);
 ;										squareLabel.setIcon(v);
 										
@@ -378,7 +378,7 @@ public class PlaceYourShip extends UI {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (isShipPlacingEnabled()) {
-						shipPlacingDirection = "right";
+						shipPlacingDirection = "horizontal";
 						// Re-invoke mouse exited and entered on e
 					mouseExited(e);
 					mouseEntered(e);
